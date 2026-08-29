@@ -50,7 +50,8 @@ function Dashboard() {
   }
 
   const action = computeNextAction(data.project, t);
-  const firstName = (data.profile.full_name ?? t("journey.dashboard.fallbackName")).split(" ")[0] ?? "";
+  const firstName =
+    (data.profile.full_name ?? t("journey.dashboard.fallbackName")).split(" ")[0] ?? "";
   const remaining = Number(data.project.total_amount) - Number(data.project.paid_amount);
 
   return (

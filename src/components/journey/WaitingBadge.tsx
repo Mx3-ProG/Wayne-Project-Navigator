@@ -1,7 +1,13 @@
 import { useT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
-export function WaitingBadge({ owner, className }: { owner: "client" | "wayne"; className?: string }) {
+export function WaitingBadge({
+  owner,
+  className,
+}: {
+  owner: "client" | "wayne";
+  className?: string;
+}) {
   const t = useT();
   const isClient = owner === "client";
   return (

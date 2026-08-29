@@ -73,7 +73,8 @@ for (const [ns, file] of namespaceFiles) {
       if (!keys.has(key)) errors.push(`${ns}.${key} — missing translation for "${lang}"`);
     }
     for (const key of keys) {
-      if (!reference.has(key)) errors.push(`${ns}.${key} — present in "${lang}" but not in "${REFERENCE}"`);
+      if (!reference.has(key))
+        errors.push(`${ns}.${key} — present in "${lang}" but not in "${REFERENCE}"`);
     }
   }
   for (const key of reference) defined.set(`${ns}.${key}`, true);
@@ -93,8 +94,13 @@ for (const file of walk(SRC)) {
       const raw = m[1];
       const ns = raw.split(".")[0];
       if (!knownNamespaces.has(ns)) continue;
-      const source_ = raw.replace(/[.*+?^$()[\]{}|\\]/g, "\\$&").replace(/\\\$\\\{[^}]*\\\}/g, "[A-Za-z0-9_-]+");
-      patterns.push({ regex: new RegExp(`^${source_}$`), where: `${relative(ROOT, file)}:${i + 1}` });
+      const source_ = raw
+        .replace(/[.*+?^$()[\]{}|\\]/g, "\\$&")
+        .replace(/\\\$\\\{[^}]*\\\}/g, "[A-Za-z0-9_-]+");
+      patterns.push({
+        regex: new RegExp(`^${source_}$`),
+        where: `${relative(ROOT, file)}:${i + 1}`,
+      });
     }
     for (const m of line.matchAll(/["'`]([a-z][A-Za-z0-9]*(?:\.[A-Za-z0-9_-]+)+)["'`]/g)) {
       const key = m[1];
@@ -113,7 +119,6 @@ for (const key of defined.keys()) {
   if (patterns.some((p) => p.regex.test(key))) continue;
   warnings.push(`${key} — defined but never used`);
 }
-
 
 const label = "[i18n]";
 if (warnings.length) {

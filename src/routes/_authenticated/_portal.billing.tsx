@@ -12,7 +12,10 @@ export const Route = createFileRoute("/_authenticated/_portal/billing")({
   head: () => ({
     meta: [
       { title: "Billing — Wayne Client Portal" },
-      { name: "description", content: "Your invoices, payments and remaining balance in one view." },
+      {
+        name: "description",
+        content: "Your invoices, payments and remaining balance in one view.",
+      },
       { property: "og:title", content: "Billing — Wayne Client Portal" },
       {
         property: "og:description",
@@ -85,9 +88,7 @@ function BillingPage() {
             <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
               {t("billing.paidSoFar")}
             </p>
-            <p className="mt-2 font-display text-4xl font-semibold">
-              {formatMoney(paid, locale)}
-            </p>
+            <p className="mt-2 font-display text-4xl font-semibold">{formatMoney(paid, locale)}</p>
           </div>
           <p className="text-sm text-muted-foreground">
             {t("billing.ofTotal", { total: formatMoney(total, locale) })}

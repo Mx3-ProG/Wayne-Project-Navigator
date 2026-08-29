@@ -29,7 +29,6 @@ const NAV = [
   { to: "/services", labelKey: "common.nav.services", icon: Sparkles },
 ] as const;
 
-
 export function PortalShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
@@ -100,13 +99,13 @@ export function PortalShell({ children }: { children: ReactNode }) {
             {t("common.nav.profile")}
           </Link>
           {isAdmin && (
-          <button
-            onClick={signOut}
-            className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-secondary/60 hover:text-foreground"
-          >
-            <LogOut className="size-4" />
-            {t("common.nav.logout")}
-          </button>
+            <button
+              onClick={signOut}
+              className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-muted-foreground transition-colors hover:bg-secondary/60 hover:text-foreground"
+            >
+              <LogOut className="size-4" />
+              {t("common.nav.logout")}
+            </button>
           )}
         </div>
       </aside>

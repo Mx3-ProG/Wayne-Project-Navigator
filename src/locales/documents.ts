@@ -5,7 +5,8 @@ export const documents: Namespace = {
     title: "Documents",
     subtitle: "Everything we've shared, in one place — nothing lost in an inbox.",
     emptyTitle: "No documents yet",
-    emptyBody: "Your agreement, brief and deliverables will appear here as your project progresses.",
+    emptyBody:
+      "Your agreement, brief and deliverables will appear here as your project progresses.",
     open: "Open",
     inPortal: "In the portal",
     "name.agreement": "Client agreement",
@@ -21,7 +22,8 @@ export const documents: Namespace = {
   },
   fr: {
     title: "Documents",
-    subtitle: "Tout ce que nous avons partagé, au même endroit — rien ne se perd dans une boîte mail.",
+    subtitle:
+      "Tout ce que nous avons partagé, au même endroit — rien ne se perd dans une boîte mail.",
     emptyTitle: "Aucun document pour le moment",
     emptyBody: "Votre contrat, brief et livrables apparaîtront ici au fil de votre projet.",
     open: "Ouvrir",
@@ -41,7 +43,8 @@ export const documents: Namespace = {
     title: "Dokumente",
     subtitle: "Alles, was wir geteilt haben, an einem Ort — nichts geht im Posteingang verloren.",
     emptyTitle: "Noch keine Dokumente",
-    emptyBody: "Ihr Vertrag, Briefing und Ihre Ergebnisse werden hier im Verlauf Ihres Projekts angezeigt.",
+    emptyBody:
+      "Ihr Vertrag, Briefing und Ihre Ergebnisse werden hier im Verlauf Ihres Projekts angezeigt.",
     open: "Öffnen",
     inPortal: "Im Portal",
     "name.agreement": "Kundenvertrag",
@@ -57,7 +60,8 @@ export const documents: Namespace = {
   },
   es: {
     title: "Documentos",
-    subtitle: "Todo lo que hemos compartido, en un solo lugar — nada se pierde en la bandeja de entrada.",
+    subtitle:
+      "Todo lo que hemos compartido, en un solo lugar — nada se pierde en la bandeja de entrada.",
     emptyTitle: "Aún no hay documentos",
     emptyBody: "Tu acuerdo, brief y entregables aparecerán aquí a medida que avance tu proyecto.",
     open: "Abrir",
@@ -77,7 +81,8 @@ export const documents: Namespace = {
     title: "Документы",
     subtitle: "Всё, чем мы поделились, в одном месте — ничего не потеряется в почте.",
     emptyTitle: "Документов пока нет",
-    emptyBody: "Ваш договор, бриф и результаты работы будут появляться здесь по мере продвижения проекта.",
+    emptyBody:
+      "Ваш договор, бриф и результаты работы будут появляться здесь по мере продвижения проекта.",
     open: "Открыть",
     inPortal: "В портале",
     "name.agreement": "Договор с клиентом",

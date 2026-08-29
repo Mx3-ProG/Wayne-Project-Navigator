@@ -42,7 +42,8 @@ export const welcome: Namespace = {
     "business.field.siret.placeholder": "123 456 789 00012",
     "business.field.since.label": "Business started on",
     "business.field.needs.label": "What are you missing online today?",
-    "business.field.needs.placeholder": "e.g. no online orders, invisible on Google, no professional image…",
+    "business.field.needs.placeholder":
+      "e.g. no online orders, invisible on Google, no professional image…",
     "business.field.phone.label": "Phone",
     "business.field.phone.placeholder": "+33 6 12 34 56 78",
     "business.field.whatsapp.label": "WhatsApp",
@@ -129,7 +130,8 @@ export const welcome: Namespace = {
     "how.rhythm.title": "Un rythme clair",
     "how.rhythm.body": "Une étape à la fois. Le portail affiche toujours la seule action suivante.",
     "how.channels.title": "Un seul endroit",
-    "how.channels.body": "Documents, factures et décisions sont ici — jamais perdus dans une boîte mail.",
+    "how.channels.body":
+      "Documents, factures et décisions sont ici — jamais perdus dans une boîte mail.",
     "how.response.title": "Délai de réponse",
     "how.response.body": "Nous répondons sous un jour ouvré, souvent bien plus vite.",
     "how.manager.title": "Votre contact",
@@ -162,7 +164,8 @@ export const welcome: Namespace = {
     "business.field.siret.placeholder": "123 456 789 00012",
     "business.field.since.label": "Date de création du business",
     "business.field.needs.label": "Qu'est-ce qui vous manque concrètement en ligne ?",
-    "business.field.needs.placeholder": "ex. pas de commandes en ligne, invisible sur Google, image peu professionnelle…",
+    "business.field.needs.placeholder":
+      "ex. pas de commandes en ligne, invisible sur Google, image peu professionnelle…",
     "business.field.phone.label": "Téléphone",
     "business.field.phone.placeholder": "+33 6 12 34 56 78",
     "business.field.whatsapp.label": "WhatsApp",
@@ -192,7 +195,8 @@ export const welcome: Namespace = {
     "business.gate": "Complétez votre fiche business pour continuer.",
     "cta.continue": "Je suis prêt — passer à mon brief",
     "done.title": "Étape de bienvenue terminée",
-    "done.body": "Votre brief est l'étape suivante. Prenez votre temps — tout s'enregistre au fil de l'eau.",
+    "done.body":
+      "Votre brief est l'étape suivante. Prenez votre temps — tout s'enregistre au fil de l'eau.",
     "done.cta": "Ouvrir mon brief",
     "error.default": "Impossible d'enregistrer votre progression",
     "celebration.title": "Bienvenue à bord",
@@ -247,9 +251,11 @@ export const welcome: Namespace = {
     subtitle: "Fünf Minuten, um unsere Zusammenarbeit zu verstehen — dann starten wir.",
     "how.title": "So arbeiten wir",
     "how.rhythm.title": "Ein klarer Rhythmus",
-    "how.rhythm.body": "Ein Schritt nach dem anderen. Das Portal zeigt immer die eine nächste Aktion.",
+    "how.rhythm.body":
+      "Ein Schritt nach dem anderen. Das Portal zeigt immer die eine nächste Aktion.",
     "how.channels.title": "Ein Ort",
-    "how.channels.body": "Dokumente, Rechnungen und Entscheidungen leben hier — nie im Postfach verloren.",
+    "how.channels.body":
+      "Dokumente, Rechnungen und Entscheidungen leben hier — nie im Postfach verloren.",
     "how.response.title": "Reaktionszeit",
     "how.response.body": "Wir antworten innerhalb eines Werktags, meist deutlich schneller.",
     "how.manager.title": "Ihr Kontakt",
@@ -282,7 +288,8 @@ export const welcome: Namespace = {
     "business.field.siret.placeholder": "123 456 789 00012",
     "business.field.since.label": "Gegründet am",
     "business.field.needs.label": "Was fehlt Ihnen online konkret?",
-    "business.field.needs.placeholder": "z. B. keine Onlinebestellungen, unsichtbar bei Google, kein professionelles Bild…",
+    "business.field.needs.placeholder":
+      "z. B. keine Onlinebestellungen, unsichtbar bei Google, kein professionelles Bild…",
     "business.field.phone.label": "Telefon",
     "business.field.phone.placeholder": "+49 151 23456789",
     "business.field.whatsapp.label": "WhatsApp",
@@ -312,7 +319,8 @@ export const welcome: Namespace = {
     "business.gate": "Vervollständigen Sie Ihr Unternehmensprofil, um fortzufahren.",
     "cta.continue": "Ich bin bereit — weiter zum Briefing",
     "done.title": "Willkommensschritt abgeschlossen",
-    "done.body": "Ihr Briefing ist der nächste Schritt. Nehmen Sie sich Zeit — es speichert laufend.",
+    "done.body":
+      "Ihr Briefing ist der nächste Schritt. Nehmen Sie sich Zeit — es speichert laufend.",
     "done.cta": "Briefing öffnen",
     "error.default": "Ihr Fortschritt konnte nicht gespeichert werden",
     "celebration.title": "Willkommen an Bord",
@@ -351,7 +359,8 @@ export const welcome: Namespace = {
     "recap.pending": "Es fehlen noch Pflichtangaben.",
     "doc.title": "Firmenprofil",
     "doc.subtitle": "Vom Kunden für dieses Projekt übermittelte Angaben.",
-    "doc.blankNotice": "Leervorlage — drucken Sie sie aus und füllen Sie sie bei Bedarf handschriftlich aus.",
+    "doc.blankNotice":
+      "Leervorlage — drucken Sie sie aus und füllen Sie sie bei Bedarf handschriftlich aus.",
     "doc.notProvided": "—",
     "doc.meta.client": "Kunde",
     "doc.meta.project": "Projekt",
@@ -369,7 +378,8 @@ export const welcome: Namespace = {
     "how.rhythm.title": "Un ritmo claro",
     "how.rhythm.body": "Un paso a la vez. El portal siempre muestra la única acción siguiente.",
     "how.channels.title": "Un solo lugar",
-    "how.channels.body": "Documentos, facturas y decisiones están aquí — nunca perdidos en un correo.",
+    "how.channels.body":
+      "Documentos, facturas y decisiones están aquí — nunca perdidos en un correo.",
     "how.response.title": "Tiempo de respuesta",
     "how.response.body": "Respondemos en un día laborable, normalmente mucho antes.",
     "how.manager.title": "Tu contacto",
@@ -402,7 +412,8 @@ export const welcome: Namespace = {
     "business.field.siret.placeholder": "B12345678",
     "business.field.since.label": "Fecha de inicio del negocio",
     "business.field.needs.label": "¿Qué te falta concretamente en línea?",
-    "business.field.needs.placeholder": "p. ej. sin pedidos en línea, invisible en Google, imagen poco profesional…",
+    "business.field.needs.placeholder":
+      "p. ej. sin pedidos en línea, invisible en Google, imagen poco profesional…",
     "business.field.phone.label": "Teléfono",
     "business.field.phone.placeholder": "+34 612 34 56 78",
     "business.field.whatsapp.label": "WhatsApp",
@@ -522,7 +533,8 @@ export const welcome: Namespace = {
     "business.field.siret.placeholder": "1234567890",
     "business.field.since.label": "Дата основания бизнеса",
     "business.field.needs.label": "Чего вам конкретно не хватает онлайн?",
-    "business.field.needs.placeholder": "напр. нет онлайн-заказов, не видно в Google, слабый имидж…",
+    "business.field.needs.placeholder":
+      "напр. нет онлайн-заказов, не видно в Google, слабый имидж…",
     "business.field.phone.label": "Телефон",
     "business.field.phone.placeholder": "+7 912 345 67 89",
     "business.field.whatsapp.label": "WhatsApp",

@@ -42,7 +42,8 @@ export const auth: Namespace = {
     "switch.toSignup": "Première visite ?",
     "switch.signinAction": "Se connecter",
     "switch.signupAction": "Créer votre espace",
-    "toast.accountCreated": "Compte créé. Vérifiez votre e-mail pour confirmer, puis connectez-vous.",
+    "toast.accountCreated":
+      "Compte créé. Vérifiez votre e-mail pour confirmer, puis connectez-vous.",
     "toast.error": "Une erreur est survenue",
   },
   de: {
@@ -64,7 +65,8 @@ export const auth: Namespace = {
     "switch.toSignup": "Zum ersten Mal hier?",
     "switch.signinAction": "Anmelden",
     "switch.signupAction": "Ihren Bereich erstellen",
-    "toast.accountCreated": "Konto erstellt. Prüfen Sie Ihre E-Mails zur Bestätigung und melden Sie sich dann an.",
+    "toast.accountCreated":
+      "Konto erstellt. Prüfen Sie Ihre E-Mails zur Bestätigung und melden Sie sich dann an.",
     "toast.error": "Etwas ist schiefgelaufen",
   },
   es: {

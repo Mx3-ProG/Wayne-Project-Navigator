@@ -1,14 +1,17 @@
-import type { ComponentType } from 'react'
-import { template as clientMessageTemplate } from './client-message'
-
+import type { ComponentType } from "react";
+import { template as clientMessageTemplate } from "./client-message";
 
 export interface TemplateEntry {
-  component: ComponentType<any>
-  subject: string | ((data: Record<string, any>) => string)
-  displayName?: string
-  previewData?: Record<string, any>
+  // Registry is intentionally heterogeneous — each template has its own prop shape.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  component: ComponentType<any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  subject: string | ((data: Record<string, any>) => string);
+  displayName?: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  previewData?: Record<string, any>;
   /** Fixed recipient — overrides caller-provided recipientEmail when set. */
-  to?: string
+  to?: string;
 }
 
 /**
@@ -20,6 +23,5 @@ export interface TemplateEntry {
  *   // then add to TEMPLATES: 'welcome': welcomeTemplate
  */
 export const TEMPLATES: Record<string, TemplateEntry> = {
-  'client-message': clientMessageTemplate,
-}
-
+  "client-message": clientMessageTemplate,
+};

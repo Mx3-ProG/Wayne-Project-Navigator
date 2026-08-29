@@ -87,7 +87,9 @@ export function JourneyTimeline({
                   {milestoneTitle(milestone, t)}
                 </p>
                 <span className="text-xs text-muted-foreground">
-                  {status === "done" ? t("journey.timeline.completed") : formatDate(milestone.due_date, locale)}
+                  {status === "done"
+                    ? t("journey.timeline.completed")
+                    : formatDate(milestone.due_date, locale)}
                 </span>
               </div>
               {(detailed || status === "active") && milestone.description && (

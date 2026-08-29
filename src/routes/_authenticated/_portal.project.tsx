@@ -56,7 +56,6 @@ function ProjectPage() {
         <p className="mt-4 text-xs text-muted-foreground">{t("journey.timeline.updated")}</p>
       </GlassCard>
 
-
       {data.links.length > 0 && (
         <GlassCard interactive={false} className="p-6 sm:p-8">
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">

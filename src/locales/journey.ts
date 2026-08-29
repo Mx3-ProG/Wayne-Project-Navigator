@@ -14,36 +14,42 @@ export const journey: Namespace = {
 
     "action.agreement.greeting": "We need you to get started.",
     "action.agreement.title": "Review and sign your agreement",
-    "action.agreement.description": "One signature and your project officially begins. Nothing is charged at this step.",
+    "action.agreement.description":
+      "One signature and your project officially begins. Nothing is charged at this step.",
     "action.agreement.eta": "3 min",
     "action.agreement.cta": "Open my agreement",
 
     "action.welcome.greeting": "Welcome aboard.",
     "action.welcome.title": "Discover how we will work together",
-    "action.welcome.description": "A short walkthrough of your journey, your team and what happens next.",
+    "action.welcome.description":
+      "A short walkthrough of your journey, your team and what happens next.",
     "action.welcome.eta": "2 min",
     "action.welcome.cta": "Read the welcome guide",
 
     "action.deposit.greeting": "One step from production.",
     "action.deposit.title": "Secure your production slot",
-    "action.deposit.description": "Your deposit reserves our team's time. The remaining balance is only due on delivery.",
+    "action.deposit.description":
+      "Your deposit reserves our team's time. The remaining balance is only due on delivery.",
     "action.deposit.eta": "2 min",
     "action.deposit.cta": "See my invoice",
 
     "action.brief.greeting": "Your project is ready to take shape.",
     "action.brief.title": "Complete your brief",
-    "action.brief.description": "We use your answers to prepare the first version of your project. You can save and come back anytime.",
+    "action.brief.description":
+      "We use your answers to prepare the first version of your project. You can save and come back anytime.",
     "action.brief.eta": "8 min",
     "action.brief.cta": "Continue my brief",
 
     "action.launch.greeting": "Your project is launching.",
     "action.launch.title": "Everything is in our hands",
-    "action.launch.description": "Our team is turning your brief into a roadmap. You will hear from your project manager shortly.",
+    "action.launch.description":
+      "Our team is turning your brief into a roadmap. You will hear from your project manager shortly.",
     "action.launch.cta": "See the roadmap",
 
     "action.production.greeting": "Your project is being built.",
     "action.production.title": "Wayne is working",
-    "action.production.description": "Our team is currently preparing your first version. No action needed from you.",
+    "action.production.description":
+      "Our team is currently preparing your first version. No action needed from you.",
     "action.production.cta": "Follow production",
 
     "action.review.greeting": "Your first version is ready.",
@@ -54,12 +60,14 @@ export const journey: Namespace = {
 
     "action.delivery.greeting": "Your project is ready.",
     "action.delivery.title": "Discover your project",
-    "action.delivery.description": "Everything has been delivered. Open your product and see it live.",
+    "action.delivery.description":
+      "Everything has been delivered. Open your product and see it live.",
     "action.delivery.cta": "Open delivery",
 
     "action.live.greeting": "Your project is live.",
     "action.live.title": "Keep building with Wayne",
-    "action.live.description": "Support, maintenance and growth are available whenever you need them. Your product is yours.",
+    "action.live.description":
+      "Support, maintenance and growth are available whenever you need them. Your product is yours.",
     "action.live.cta": "Open my product",
 
     "timeline.completed": "Completed",
@@ -95,52 +103,61 @@ export const journey: Namespace = {
 
     "action.agreement.greeting": "Nous avons besoin de vous pour démarrer.",
     "action.agreement.title": "Consultez et signez votre contrat",
-    "action.agreement.description": "Une signature et votre projet démarre officiellement. Rien n'est débité à cette étape.",
+    "action.agreement.description":
+      "Une signature et votre projet démarre officiellement. Rien n'est débité à cette étape.",
     "action.agreement.eta": "3 min",
     "action.agreement.cta": "Ouvrir mon contrat",
 
     "action.welcome.greeting": "Bienvenue à bord.",
     "action.welcome.title": "Découvrez comment nous allons collaborer",
-    "action.welcome.description": "Un court aperçu de votre parcours, de votre équipe et des prochaines étapes.",
+    "action.welcome.description":
+      "Un court aperçu de votre parcours, de votre équipe et des prochaines étapes.",
     "action.welcome.eta": "2 min",
     "action.welcome.cta": "Lire le guide de bienvenue",
 
     "action.deposit.greeting": "À un pas de la production.",
     "action.deposit.title": "Réservez votre créneau de production",
-    "action.deposit.description": "Votre acompte réserve le temps de notre équipe. Le solde restant n'est dû qu'à la livraison.",
+    "action.deposit.description":
+      "Votre acompte réserve le temps de notre équipe. Le solde restant n'est dû qu'à la livraison.",
     "action.deposit.eta": "2 min",
     "action.deposit.cta": "Voir ma facture",
 
     "action.brief.greeting": "Votre projet est prêt à prendre forme.",
     "action.brief.title": "Complétez votre brief",
-    "action.brief.description": "Nous utilisons vos réponses pour préparer la première version de votre projet. Vous pouvez enregistrer et revenir à tout moment.",
+    "action.brief.description":
+      "Nous utilisons vos réponses pour préparer la première version de votre projet. Vous pouvez enregistrer et revenir à tout moment.",
     "action.brief.eta": "8 min",
     "action.brief.cta": "Continuer mon brief",
 
     "action.launch.greeting": "Votre projet est en cours de lancement.",
     "action.launch.title": "Tout est entre nos mains",
-    "action.launch.description": "Notre équipe transforme votre brief en feuille de route. Votre chef de projet vous contactera prochainement.",
+    "action.launch.description":
+      "Notre équipe transforme votre brief en feuille de route. Votre chef de projet vous contactera prochainement.",
     "action.launch.cta": "Voir la feuille de route",
 
     "action.production.greeting": "Votre projet est en cours de réalisation.",
     "action.production.title": "Wayne est au travail",
-    "action.production.description": "Notre équipe prépare actuellement votre première version. Aucune action requise de votre part.",
+    "action.production.description":
+      "Notre équipe prépare actuellement votre première version. Aucune action requise de votre part.",
     "action.production.cta": "Suivre la production",
 
     "action.review.greeting": "Votre première version est prête.",
     "action.review.title": "Révisez votre première version",
-    "action.review.description": "Dites-nous ce que vous aimez et ce qui doit changer. Nous itérons rapidement.",
+    "action.review.description":
+      "Dites-nous ce que vous aimez et ce qui doit changer. Nous itérons rapidement.",
     "action.review.eta": "10 min",
     "action.review.cta": "Réviser mon projet",
 
     "action.delivery.greeting": "Votre projet est prêt.",
     "action.delivery.title": "Découvrez votre projet",
-    "action.delivery.description": "Tout a été livré. Ouvrez votre produit et découvrez-le en ligne.",
+    "action.delivery.description":
+      "Tout a été livré. Ouvrez votre produit et découvrez-le en ligne.",
     "action.delivery.cta": "Ouvrir la livraison",
 
     "action.live.greeting": "Votre projet est en ligne.",
     "action.live.title": "Continuez à construire avec Wayne",
-    "action.live.description": "Support, maintenance et croissance sont disponibles quand vous en avez besoin. Votre produit vous appartient.",
+    "action.live.description":
+      "Support, maintenance et croissance sont disponibles quand vous en avez besoin. Votre produit vous appartient.",
     "action.live.cta": "Ouvrir mon produit",
 
     "timeline.completed": "Terminé",
@@ -176,52 +193,61 @@ export const journey: Namespace = {
 
     "action.agreement.greeting": "Wir brauchen Sie, um zu starten.",
     "action.agreement.title": "Prüfen und unterschreiben Sie Ihren Vertrag",
-    "action.agreement.description": "Eine Unterschrift und Ihr Projekt beginnt offiziell. In diesem Schritt wird nichts berechnet.",
+    "action.agreement.description":
+      "Eine Unterschrift und Ihr Projekt beginnt offiziell. In diesem Schritt wird nichts berechnet.",
     "action.agreement.eta": "3 Min.",
     "action.agreement.cta": "Vertrag öffnen",
 
     "action.welcome.greeting": "Willkommen an Bord.",
     "action.welcome.title": "Erfahren Sie, wie wir zusammenarbeiten",
-    "action.welcome.description": "Ein kurzer Überblick über Ihre Reise, Ihr Team und die nächsten Schritte.",
+    "action.welcome.description":
+      "Ein kurzer Überblick über Ihre Reise, Ihr Team und die nächsten Schritte.",
     "action.welcome.eta": "2 Min.",
     "action.welcome.cta": "Willkommensleitfaden lesen",
 
     "action.deposit.greeting": "Nur noch ein Schritt bis zur Produktion.",
     "action.deposit.title": "Sichern Sie sich Ihren Produktionsslot",
-    "action.deposit.description": "Ihre Anzahlung reserviert die Zeit unseres Teams. Der Restbetrag ist erst bei Lieferung fällig.",
+    "action.deposit.description":
+      "Ihre Anzahlung reserviert die Zeit unseres Teams. Der Restbetrag ist erst bei Lieferung fällig.",
     "action.deposit.eta": "2 Min.",
     "action.deposit.cta": "Rechnung ansehen",
 
     "action.brief.greeting": "Ihr Projekt nimmt Gestalt an.",
     "action.brief.title": "Vervollständigen Sie Ihr Briefing",
-    "action.brief.description": "Wir nutzen Ihre Antworten, um die erste Version Ihres Projekts vorzubereiten. Sie können jederzeit speichern und zurückkehren.",
+    "action.brief.description":
+      "Wir nutzen Ihre Antworten, um die erste Version Ihres Projekts vorzubereiten. Sie können jederzeit speichern und zurückkehren.",
     "action.brief.eta": "8 Min.",
     "action.brief.cta": "Briefing fortsetzen",
 
     "action.launch.greeting": "Ihr Projekt startet.",
     "action.launch.title": "Alles liegt in unseren Händen",
-    "action.launch.description": "Unser Team verwandelt Ihr Briefing in eine Roadmap. Ihr Projektmanager meldet sich in Kürze.",
+    "action.launch.description":
+      "Unser Team verwandelt Ihr Briefing in eine Roadmap. Ihr Projektmanager meldet sich in Kürze.",
     "action.launch.cta": "Roadmap ansehen",
 
     "action.production.greeting": "Ihr Projekt wird gebaut.",
     "action.production.title": "Wayne arbeitet daran",
-    "action.production.description": "Unser Team bereitet gerade Ihre erste Version vor. Sie müssen nichts tun.",
+    "action.production.description":
+      "Unser Team bereitet gerade Ihre erste Version vor. Sie müssen nichts tun.",
     "action.production.cta": "Produktion verfolgen",
 
     "action.review.greeting": "Ihre erste Version ist fertig.",
     "action.review.title": "Überprüfen Sie Ihre erste Version",
-    "action.review.description": "Sagen Sie uns, was Ihnen gefällt und was sich ändern soll. Wir iterieren schnell.",
+    "action.review.description":
+      "Sagen Sie uns, was Ihnen gefällt und was sich ändern soll. Wir iterieren schnell.",
     "action.review.eta": "10 Min.",
     "action.review.cta": "Projekt überprüfen",
 
     "action.delivery.greeting": "Ihr Projekt ist fertig.",
     "action.delivery.title": "Entdecken Sie Ihr Projekt",
-    "action.delivery.description": "Alles wurde geliefert. Öffnen Sie Ihr Produkt und sehen Sie es live.",
+    "action.delivery.description":
+      "Alles wurde geliefert. Öffnen Sie Ihr Produkt und sehen Sie es live.",
     "action.delivery.cta": "Lieferung öffnen",
 
     "action.live.greeting": "Ihr Projekt ist live.",
     "action.live.title": "Bauen Sie weiter mit Wayne",
-    "action.live.description": "Support, Wartung und Wachstum stehen Ihnen jederzeit zur Verfügung. Ihr Produkt gehört Ihnen.",
+    "action.live.description":
+      "Support, Wartung und Wachstum stehen Ihnen jederzeit zur Verfügung. Ihr Produkt gehört Ihnen.",
     "action.live.cta": "Mein Produkt öffnen",
 
     "timeline.completed": "Abgeschlossen",
@@ -257,36 +283,42 @@ export const journey: Namespace = {
 
     "action.agreement.greeting": "Necesitamos que empieces.",
     "action.agreement.title": "Revisa y firma tu contrato",
-    "action.agreement.description": "Con una firma tu proyecto comienza oficialmente. No se cobra nada en este paso.",
+    "action.agreement.description":
+      "Con una firma tu proyecto comienza oficialmente. No se cobra nada en este paso.",
     "action.agreement.eta": "3 min",
     "action.agreement.cta": "Abrir mi contrato",
 
     "action.welcome.greeting": "Bienvenido a bordo.",
     "action.welcome.title": "Descubre cómo vamos a trabajar juntos",
-    "action.welcome.description": "Un breve recorrido por tu viaje, tu equipo y los próximos pasos.",
+    "action.welcome.description":
+      "Un breve recorrido por tu viaje, tu equipo y los próximos pasos.",
     "action.welcome.eta": "2 min",
     "action.welcome.cta": "Leer la guía de bienvenida",
 
     "action.deposit.greeting": "A un paso de la producción.",
     "action.deposit.title": "Asegura tu espacio de producción",
-    "action.deposit.description": "Tu depósito reserva el tiempo de nuestro equipo. El saldo restante solo se debe al entregar.",
+    "action.deposit.description":
+      "Tu depósito reserva el tiempo de nuestro equipo. El saldo restante solo se debe al entregar.",
     "action.deposit.eta": "2 min",
     "action.deposit.cta": "Ver mi factura",
 
     "action.brief.greeting": "Tu proyecto está listo para tomar forma.",
     "action.brief.title": "Completa tu brief",
-    "action.brief.description": "Usamos tus respuestas para preparar la primera versión de tu proyecto. Puedes guardar y volver cuando quieras.",
+    "action.brief.description":
+      "Usamos tus respuestas para preparar la primera versión de tu proyecto. Puedes guardar y volver cuando quieras.",
     "action.brief.eta": "8 min",
     "action.brief.cta": "Continuar mi brief",
 
     "action.launch.greeting": "Tu proyecto está en marcha.",
     "action.launch.title": "Todo está en nuestras manos",
-    "action.launch.description": "Nuestro equipo está convirtiendo tu brief en una hoja de ruta. Pronto sabrás de tu gestor de proyecto.",
+    "action.launch.description":
+      "Nuestro equipo está convirtiendo tu brief en una hoja de ruta. Pronto sabrás de tu gestor de proyecto.",
     "action.launch.cta": "Ver la hoja de ruta",
 
     "action.production.greeting": "Tu proyecto se está construyendo.",
     "action.production.title": "Wayne está trabajando",
-    "action.production.description": "Nuestro equipo está preparando tu primera versión. No se requiere ninguna acción por tu parte.",
+    "action.production.description":
+      "Nuestro equipo está preparando tu primera versión. No se requiere ninguna acción por tu parte.",
     "action.production.cta": "Seguir la producción",
 
     "action.review.greeting": "Tu primera versión está lista.",
@@ -302,7 +334,8 @@ export const journey: Namespace = {
 
     "action.live.greeting": "Tu proyecto está en vivo.",
     "action.live.title": "Sigue creciendo con Wayne",
-    "action.live.description": "Soporte, mantenimiento y crecimiento están disponibles cuando los necesites. Tu producto es tuyo.",
+    "action.live.description":
+      "Soporte, mantenimiento y crecimiento están disponibles cuando los necesites. Tu producto es tuyo.",
     "action.live.cta": "Abrir mi producto",
 
     "timeline.completed": "Completado",
@@ -338,7 +371,8 @@ export const journey: Namespace = {
 
     "action.agreement.greeting": "Нам нужно, чтобы вы начали.",
     "action.agreement.title": "Просмотрите и подпишите договор",
-    "action.agreement.description": "Одна подпись — и ваш проект официально начинается. На этом этапе ничего не списывается.",
+    "action.agreement.description":
+      "Одна подпись — и ваш проект официально начинается. На этом этапе ничего не списывается.",
     "action.agreement.eta": "3 мин",
     "action.agreement.cta": "Открыть договор",
 
@@ -350,40 +384,47 @@ export const journey: Namespace = {
 
     "action.deposit.greeting": "Остался один шаг до производства.",
     "action.deposit.title": "Забронируйте слот на производство",
-    "action.deposit.description": "Ваш депозит резервирует время нашей команды. Остаток оплачивается только при доставке.",
+    "action.deposit.description":
+      "Ваш депозит резервирует время нашей команды. Остаток оплачивается только при доставке.",
     "action.deposit.eta": "2 мин",
     "action.deposit.cta": "Посмотреть счёт",
 
     "action.brief.greeting": "Ваш проект готов обрести форму.",
     "action.brief.title": "Заполните бриф",
-    "action.brief.description": "Мы используем ваши ответы для подготовки первой версии проекта. Вы можете сохранить и вернуться в любое время.",
+    "action.brief.description":
+      "Мы используем ваши ответы для подготовки первой версии проекта. Вы можете сохранить и вернуться в любое время.",
     "action.brief.eta": "8 мин",
     "action.brief.cta": "Продолжить бриф",
 
     "action.launch.greeting": "Ваш проект запускается.",
     "action.launch.title": "Всё в наших руках",
-    "action.launch.description": "Наша команда превращает ваш бриф в дорожную карту. Скоро с вами свяжется менеджер проекта.",
+    "action.launch.description":
+      "Наша команда превращает ваш бриф в дорожную карту. Скоро с вами свяжется менеджер проекта.",
     "action.launch.cta": "Посмотреть дорожную карту",
 
     "action.production.greeting": "Ваш проект создаётся.",
     "action.production.title": "Wayne работает",
-    "action.production.description": "Наша команда сейчас готовит первую версию. От вас никаких действий не требуется.",
+    "action.production.description":
+      "Наша команда сейчас готовит первую версию. От вас никаких действий не требуется.",
     "action.production.cta": "Следить за производством",
 
     "action.review.greeting": "Ваша первая версия готова.",
     "action.review.title": "Проверьте первую версию",
-    "action.review.description": "Расскажите, что вам нравится и что нужно изменить. Мы быстро вносим правки.",
+    "action.review.description":
+      "Расскажите, что вам нравится и что нужно изменить. Мы быстро вносим правки.",
     "action.review.eta": "10 мин",
     "action.review.cta": "Проверить проект",
 
     "action.delivery.greeting": "Ваш проект готов.",
     "action.delivery.title": "Откройте свой проект",
-    "action.delivery.description": "Всё уже доставлено. Откройте свой продукт и увидьте его в действии.",
+    "action.delivery.description":
+      "Всё уже доставлено. Откройте свой продукт и увидьте его в действии.",
     "action.delivery.cta": "Открыть доставку",
 
     "action.live.greeting": "Ваш проект в сети.",
     "action.live.title": "Продолжайте расти вместе с Wayne",
-    "action.live.description": "Поддержка, обслуживание и развитие доступны в любой момент. Продукт принадлежит вам.",
+    "action.live.description":
+      "Поддержка, обслуживание и развитие доступны в любой момент. Продукт принадлежит вам.",
     "action.live.cta": "Открыть мой продукт",
 
     "timeline.completed": "Завершено",

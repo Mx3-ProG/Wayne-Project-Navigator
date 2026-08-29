@@ -60,9 +60,11 @@ export type WelcomeStep =
 
 export const WELCOME_STEPS: WelcomeStep[] = [
   { key: "guide", kind: "guide" },
-  ...BUSINESS_SECTIONS.map(
-    (section): WelcomeStep => ({ key: section.key, kind: "section", section }),
-  ),
+  ...BUSINESS_SECTIONS.map((section): WelcomeStep => ({
+    key: section.key,
+    kind: "section",
+    section,
+  })),
   { key: "recap", kind: "recap" },
 ];
 

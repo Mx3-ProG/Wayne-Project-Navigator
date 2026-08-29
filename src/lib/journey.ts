@@ -24,7 +24,6 @@ export const PHASE_ORDER: Phase[] = [
   "live",
 ];
 
-
 export const PHASE_LABEL_KEY: Record<Phase, string> = {
   agreement: "journey.phase.agreement",
   welcome: "journey.phase.welcome",
@@ -228,9 +227,6 @@ export function phaseRoute(phase: string): string {
   return PHASE_ROUTE[phase as Phase] ?? "/dashboard";
 }
 
-
-
-
 const DOC_KEYS = ["agreement", "welcome", "brief", "invoice_deposit", "deliverable"] as const;
 const DOC_TYPES = ["agreement", "welcome", "brief", "invoice", "deliverable"] as const;
 const INVOICE_KEYS = ["deposit", "balance"] as const;
@@ -262,7 +258,6 @@ export function milestoneTitle(milestone: Milestone, t: TranslateFn): string {
   return PHASE_LABEL_KEY[key] ? t(PHASE_LABEL_KEY[key]) : milestone.title;
 }
 
-
 const LOCALE_TAG: Record<Locale, string> = {
   en: "en-GB",
   fr: "fr-FR",
@@ -282,9 +277,10 @@ export function formatMoney(amount: number | string | null, locale: Locale = "en
 
 export function formatDate(date: string | null, locale: Locale = "en") {
   if (!date) return "—";
-  return new Intl.DateTimeFormat(LOCALE_TAG[locale] ?? "en-GB", { day: "numeric", month: "long" }).format(
-    new Date(date),
-  );
+  return new Intl.DateTimeFormat(LOCALE_TAG[locale] ?? "en-GB", {
+    day: "numeric",
+    month: "long",
+  }).format(new Date(date));
 }
 
 export function formatFullDate(date: string | null, locale: Locale = "en") {

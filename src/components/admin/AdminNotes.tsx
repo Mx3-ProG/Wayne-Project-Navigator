@@ -109,8 +109,12 @@ export function AdminMessage({
   const queryClient = useQueryClient();
   const send = useServerFn(sendClientMessage);
   const [sending, setSending] = useState(false);
-  const [subject, setSubject] = useState(t("admin.message.defaultSubject", { project: projectName }));
-  const [body, setBody] = useState(t("admin.message.defaultBody", { name: name ?? "", project: projectName }));
+  const [subject, setSubject] = useState(
+    t("admin.message.defaultSubject", { project: projectName }),
+  );
+  const [body, setBody] = useState(
+    t("admin.message.defaultBody", { name: name ?? "", project: projectName }),
+  );
 
   async function submit() {
     if (!email) return;
@@ -129,7 +133,6 @@ export function AdminMessage({
       setSending(false);
     }
   }
-
 
   return (
     <GlassCard interactive={false} className="p-6">

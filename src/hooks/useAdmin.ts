@@ -1,18 +1,11 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
-import type {
-  Agreement,
-  Brief,
-  Document,
-  Invoice,
-  Milestone,
-  Phase,
-  Project,
-} from "@/lib/journey";
+import type { Agreement, Brief, Document, Invoice, Milestone, Phase, Project } from "@/lib/journey";
 
 export type Offer = Database["public"]["Tables"]["offers"]["Row"];
-export type AdminProjectRow = Database["public"]["Functions"]["admin_list_projects"]["Returns"][number];
+export type AdminProjectRow =
+  Database["public"]["Functions"]["admin_list_projects"]["Returns"][number];
 
 export const adminProjectsKey = ["admin", "projects"] as const;
 export const adminRoleKey = ["admin", "role"] as const;
@@ -53,7 +46,12 @@ export type AdminProjectDetail = {
   brief: Brief | null;
   agreement: Agreement | null;
   offer: Offer | null;
-  owner: { full_name: string | null; email: string | null; company: string | null; phone: string | null } | null;
+  owner: {
+    full_name: string | null;
+    email: string | null;
+    company: string | null;
+    phone: string | null;
+  } | null;
 };
 
 export function adminProjectKey(projectId: string) {
@@ -71,15 +69,17 @@ export function useAdminProject(projectId: string) {
         .maybeSingle();
       if (!project) return null;
 
-      const [milestones, invoices, documents, brief, agreement, offer, members] = await Promise.all([
-        supabase.from("milestones").select("*").eq("project_id", projectId).order("position"),
-        supabase.from("invoices").select("*").eq("project_id", projectId).order("due_date"),
-        supabase.from("documents").select("*").eq("project_id", projectId).order("created_at"),
-        supabase.from("briefs").select("*").eq("project_id", projectId).maybeSingle(),
-        supabase.from("agreements").select("*").eq("project_id", projectId).maybeSingle(),
-        supabase.from("offers").select("*").eq("project_id", projectId).maybeSingle(),
-        supabase.from("project_members").select("user_id").eq("project_id", projectId).limit(1),
-      ]);
+      const [milestones, invoices, documents, brief, agreement, offer, members] = await Promise.all(
+        [
+          supabase.from("milestones").select("*").eq("project_id", projectId).order("position"),
+          supabase.from("invoices").select("*").eq("project_id", projectId).order("due_date"),
+          supabase.from("documents").select("*").eq("project_id", projectId).order("created_at"),
+          supabase.from("briefs").select("*").eq("project_id", projectId).maybeSingle(),
+          supabase.from("agreements").select("*").eq("project_id", projectId).maybeSingle(),
+          supabase.from("offers").select("*").eq("project_id", projectId).maybeSingle(),
+          supabase.from("project_members").select("user_id").eq("project_id", projectId).limit(1),
+        ],
+      );
 
       let owner: AdminProjectDetail["owner"] = null;
       const ownerId = members.data?.[0]?.user_id;
@@ -165,7 +165,11 @@ export function useAdminMarkPaid(projectId: string) {
 export function useAdminAdvance(projectId: string) {
   const invalidate = useInvalidateAdmin(projectId);
   return useMutation({
-    mutationFn: async (input: { phase: Phase; waitingOn: "client" | "wayne"; progress: number }) => {
+    mutationFn: async (input: {
+      phase: Phase;
+      waitingOn: "client" | "wayne";
+      progress: number;
+    }) => {
       const { error } = await supabase.rpc("advance_project", {
         _project_id: projectId,
         _phase: input.phase,

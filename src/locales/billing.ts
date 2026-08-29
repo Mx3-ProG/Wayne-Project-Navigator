@@ -8,7 +8,8 @@ export const billing: Namespace = {
     "offer.linkSoon": "The payment link is being finalised.",
     "offer.note": "You are redirected to our secure Stripe checkout — the amount is shown there.",
     "offer.waiting.title": "No proposal yet",
-    "offer.waiting.body": "Once we have reviewed your brief, your proposal and its secure payment link appear here.",
+    "offer.waiting.body":
+      "Once we have reviewed your brief, your proposal and its secure payment link appear here.",
     "invoice.awaitingOffer": "Available once your proposal is sent",
     "invoice.deposit": "Deposit — 1/2",
     "invoice.view": "View invoice",
@@ -46,9 +47,11 @@ export const billing: Namespace = {
     "offer.title": "Votre proposition est prête",
     "offer.cta": "Ouvrir le paiement sécurisé",
     "offer.linkSoon": "Le lien de paiement est en cours de finalisation.",
-    "offer.note": "Vous êtes redirigé vers notre paiement sécurisé Stripe — le montant y est affiché.",
+    "offer.note":
+      "Vous êtes redirigé vers notre paiement sécurisé Stripe — le montant y est affiché.",
     "offer.waiting.title": "Aucune proposition pour le moment",
-    "offer.waiting.body": "Dès que nous aurons étudié votre brief, votre proposition et son lien de paiement sécurisé apparaîtront ici.",
+    "offer.waiting.body":
+      "Dès que nous aurons étudié votre brief, votre proposition et son lien de paiement sécurisé apparaîtront ici.",
     "invoice.awaitingOffer": "Disponible dès l’envoi de votre proposition",
     "invoice.deposit": "Acompte — 1/2",
     "invoice.view": "Voir la facture",
@@ -79,16 +82,19 @@ export const billing: Namespace = {
     ofTotal: "sur {total} au total",
     paidOn: "Payée le {date}",
     dueOn: "Échéance le {date}",
-    securityNote: "Les paiements sont traités en toute sécurité. Vos coordonnées bancaires ne transitent jamais par nos serveurs.",
+    securityNote:
+      "Les paiements sont traités en toute sécurité. Vos coordonnées bancaires ne transitent jamais par nos serveurs.",
   },
   de: {
     "offer.eyebrow": "Angebot",
     "offer.title": "Ihr Angebot ist bereit",
     "offer.cta": "Sichere Zahlung öffnen",
     "offer.linkSoon": "Der Zahlungslink wird noch fertiggestellt.",
-    "offer.note": "Sie werden zu unserer sicheren Stripe-Zahlung weitergeleitet — der Betrag wird dort angezeigt.",
+    "offer.note":
+      "Sie werden zu unserer sicheren Stripe-Zahlung weitergeleitet — der Betrag wird dort angezeigt.",
     "offer.waiting.title": "Noch kein Angebot",
-    "offer.waiting.body": "Sobald wir Ihr Briefing geprüft haben, erscheinen hier Ihr Angebot und der sichere Zahlungslink.",
+    "offer.waiting.body":
+      "Sobald wir Ihr Briefing geprüft haben, erscheinen hier Ihr Angebot und der sichere Zahlungslink.",
     "invoice.awaitingOffer": "Verfügbar, sobald Ihr Angebot gesendet ist",
     "invoice.deposit": "Anzahlung — 1/2",
     "invoice.view": "Rechnung ansehen",
@@ -109,12 +115,15 @@ export const billing: Namespace = {
     "detail.download": "PDF herunterladen",
     "detail.back": "Zurück zur Abrechnung",
     "detail.notFound": "Diese Rechnung ist nicht verfügbar.",
-    "detail.paidNote": "Vollständig bezahlt — vielen Dank. Von Ihrer Seite ist nichts weiter nötig.",
-    "detail.unpaidNote": "Bezahlen Sie diese Rechnung, um den nächsten Projektschritt freizuschalten.",
+    "detail.paidNote":
+      "Vollständig bezahlt — vielen Dank. Von Ihrer Seite ist nichts weiter nötig.",
+    "detail.unpaidNote":
+      "Bezahlen Sie diese Rechnung, um den nächsten Projektschritt freizuschalten.",
     "detail.printedOn": "Dokument erstellt am {date}",
     "invoice.balance": "Restbetrag — 2/2",
     title: "Abrechnung",
-    subtitle: "Von Natur aus transparent: Sie sehen jederzeit, was bezahlt ist und was noch aussteht.",
+    subtitle:
+      "Von Natur aus transparent: Sie sehen jederzeit, was bezahlt ist und was noch aussteht.",
     paidSoFar: "Bisher bezahlt",
     ofTotal: "von {total} insgesamt",
     paidOn: "Bezahlt am {date}",
@@ -128,7 +137,8 @@ export const billing: Namespace = {
     "offer.linkSoon": "El enlace de pago se está finalizando.",
     "offer.note": "Te redirigimos a nuestro pago seguro con Stripe — el importe se muestra allí.",
     "offer.waiting.title": "Aún no hay propuesta",
-    "offer.waiting.body": "En cuanto revisemos tu brief, aquí aparecerán tu propuesta y su enlace de pago seguro.",
+    "offer.waiting.body":
+      "En cuanto revisemos tu brief, aquí aparecerán tu propuesta y su enlace de pago seguro.",
     "invoice.awaitingOffer": "Disponible cuando se envíe tu propuesta",
     "invoice.deposit": "Anticipo — 1/2",
     "invoice.view": "Ver la factura",
@@ -159,7 +169,8 @@ export const billing: Namespace = {
     ofTotal: "de {total} en total",
     paidOn: "Pagada el {date}",
     dueOn: "Vence el {date}",
-    securityNote: "Los pagos se procesan de forma segura. Los datos de tu tarjeta nunca pasan por nuestros servidores.",
+    securityNote:
+      "Los pagos se procesan de forma segura. Los datos de tu tarjeta nunca pasan por nuestros servidores.",
   },
   ru: {
     "offer.eyebrow": "Предложение",
@@ -168,7 +179,8 @@ export const billing: Namespace = {
     "offer.linkSoon": "Ссылка на оплату готовится.",
     "offer.note": "Вы перейдёте на безопасную оплату Stripe — сумма указана там.",
     "offer.waiting.title": "Предложения пока нет",
-    "offer.waiting.body": "Как только мы изучим ваш бриф, здесь появится предложение и ссылка на безопасную оплату.",
+    "offer.waiting.body":
+      "Как только мы изучим ваш бриф, здесь появится предложение и ссылка на безопасную оплату.",
     "invoice.awaitingOffer": "Появится после отправки предложения",
     "invoice.deposit": "Аванс — 1/2",
     "invoice.view": "Открыть счёт",
@@ -199,6 +211,7 @@ export const billing: Namespace = {
     ofTotal: "из {total} всего",
     paidOn: "Оплачено {date}",
     dueOn: "Срок оплаты {date}",
-    securityNote: "Платежи обрабатываются безопасно. Данные карты никогда не попадают на наши серверы.",
+    securityNote:
+      "Платежи обрабатываются безопасно. Данные карты никогда не попадают на наши серверы.",
   },
 };

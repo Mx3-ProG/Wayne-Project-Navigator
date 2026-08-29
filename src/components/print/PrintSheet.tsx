@@ -34,7 +34,9 @@ export function PrintSheet({
       </header>
 
       {meta && meta.length > 0 && (
-        <table style={{ width: "100%", fontSize: 12, marginBottom: 20, borderCollapse: "collapse" }}>
+        <table
+          style={{ width: "100%", fontSize: 12, marginBottom: 20, borderCollapse: "collapse" }}
+        >
           <tbody>
             {meta.map((row) => (
               <tr key={row.label}>

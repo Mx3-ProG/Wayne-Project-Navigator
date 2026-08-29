@@ -19,7 +19,9 @@ export function NextActionCard({ action }: { action: NextAction }) {
       <GlassCard variant={isWayne ? "default" : "active"} className="p-6 sm:p-8">
         <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-primary">
           <Sparkles className="size-3.5" />
-          {isWayne ? t("journey.nextActionCard.whatWeAreDoing") : t("journey.nextActionCard.yourNextStep")}
+          {isWayne
+            ? t("journey.nextActionCard.whatWeAreDoing")
+            : t("journey.nextActionCard.yourNextStep")}
         </p>
 
         <h3 className="mt-4 font-display text-2xl font-semibold sm:text-3xl">{action.title}</h3>

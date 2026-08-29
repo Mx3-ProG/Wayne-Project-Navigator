@@ -11,7 +11,10 @@ export const Route = createFileRoute("/_authenticated/_portal/services")({
   head: () => ({
     meta: [
       { title: "Services — Wayne Client Portal" },
-      { name: "description", content: "Care plans and growth services to keep your product moving." },
+      {
+        name: "description",
+        content: "Care plans and growth services to keep your product moving.",
+      },
       { property: "og:title", content: "Services — Wayne Client Portal" },
       {
         property: "og:description",
