@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -164,6 +164,14 @@ function AuthPage() {
             >
               {mode === "signup" ? t("auth.switch.signinAction") : t("auth.switch.signupAction")}
             </button>
+          </p>
+          <p className="mt-3 text-center text-sm text-muted-foreground">
+            <Link
+              to="/login"
+              className="font-medium text-primary underline-offset-4 hover:underline"
+            >
+              {t("auth.switch.usePasswordless")}
+            </Link>
           </p>
         </GlassCard>
       </motion.div>

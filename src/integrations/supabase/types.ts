@@ -46,6 +46,39 @@ export type Database = {
           },
         ];
       };
+      auth_codes: {
+        Row: {
+          attempt_count: number;
+          code_hash: string;
+          created_at: string;
+          email: string;
+          expires_at: string;
+          id: string;
+          request_ip: string | null;
+          used_at: string | null;
+        };
+        Insert: {
+          attempt_count?: number;
+          code_hash: string;
+          created_at?: string;
+          email: string;
+          expires_at: string;
+          id?: string;
+          request_ip?: string | null;
+          used_at?: string | null;
+        };
+        Update: {
+          attempt_count?: number;
+          code_hash?: string;
+          created_at?: string;
+          email?: string;
+          expires_at?: string;
+          id?: string;
+          request_ip?: string | null;
+          used_at?: string | null;
+        };
+        Relationships: [];
+      };
       briefs: {
         Row: {
           answers: Json;
