@@ -76,14 +76,17 @@ export default defineConfig(async ({ command, mode }) => {
 
   const config = {
     define: envDefine,
-    ...(isDevBuild
-      ? {
-          environments: {
-            client: { define: { "process.env.NODE_ENV": JSON.stringify("development") } },
-          },
-          esbuild: { keepNames: true },
-        }
-      : {}),
+    environments: {
+      // Rolldown's automatic chunk splitting can produce circular chunk
+      // imports for the SSR helper runtime (e.g. `__exportAll`), which
+      // crashes at module-evaluation time depending on chunk load order.
+      // A single SSR bundle avoids that class of bug entirely.
+      ssr: { build: { rolldownOptions: { output: { codeSplitting: false } } } },
+      ...(isDevBuild
+        ? { client: { define: { "process.env.NODE_ENV": JSON.stringify("development") } } }
+        : {}),
+    },
+    ...(isDevBuild ? { esbuild: { keepNames: true } } : {}),
     css: { transformer: "lightningcss" as const },
     resolve: {
       alias: {
