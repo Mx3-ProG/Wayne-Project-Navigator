@@ -13,11 +13,10 @@ export const Route = createFileRoute("/_authenticated/_admin")({
     const { data: auth } = await supabase.auth.getUser();
     const user = auth.user;
     if (!user) throw redirect({ to: "/auth" });
-    const { data: isAdmin } = await supabase.rpc("has_role", {
+    const { data: isAdminOrAbove } = await supabase.rpc("is_admin_or_above", {
       _user_id: user.id,
-      _role: "admin",
     });
-    if (!isAdmin) throw redirect({ to: "/dashboard" });
+    if (!isAdminOrAbove) throw redirect({ to: "/dashboard" });
     return { isAdmin: true };
   },
   component: AdminLayout,

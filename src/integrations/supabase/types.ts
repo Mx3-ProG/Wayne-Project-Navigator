@@ -8,6 +8,32 @@ export type Database = {
   };
   public: {
     Tables: {
+      admin_project_assignments: {
+        Row: {
+          admin_id: string;
+          assigned_at: string;
+          project_id: string;
+        };
+        Insert: {
+          admin_id: string;
+          assigned_at?: string;
+          project_id: string;
+        };
+        Update: {
+          admin_id?: string;
+          assigned_at?: string;
+          project_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "admin_project_assignments_project_id_fkey";
+            columns: ["project_id"];
+            isOneToOne: false;
+            referencedRelation: "projects";
+            referencedColumns: ["id"];
+          },
+        ];
+      };
       agreements: {
         Row: {
           content: string | null;
@@ -703,8 +729,11 @@ export type Database = {
         };
         Returns: boolean;
       };
+      is_admin_or_above: { Args: { _user_id: string }; Returns: boolean };
       is_client_member: { Args: { _client_id: string }; Returns: boolean };
+      is_project_admin: { Args: { _project_id: string }; Returns: boolean };
       is_project_member: { Args: { _project_id: string }; Returns: boolean };
+      is_superadmin: { Args: { _user_id: string }; Returns: boolean };
       mark_invoice_paid: { Args: { _invoice_id: string }; Returns: undefined };
       reopen_brief: { Args: { _project_id: string }; Returns: undefined };
       save_business_profile: {
@@ -739,6 +768,20 @@ export type Database = {
         };
         Returns: undefined;
       };
+      superadmin_revoke_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"];
+          _target_user_id: string;
+        };
+        Returns: undefined;
+      };
+      superadmin_set_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"];
+          _target_user_id: string;
+        };
+        Returns: undefined;
+      };
       sync_milestones: {
         Args: {
           _phase: Database["public"]["Enums"]["project_phase"];
@@ -749,7 +792,7 @@ export type Database = {
       unpublish_offer: { Args: { _project_id: string }; Returns: undefined };
     };
     Enums: {
-      app_role: "admin" | "client";
+      app_role: "admin" | "client" | "superadmin";
       doc_status: "signed" | "waiting" | "completed" | "available";
       invoice_status: "paid" | "waiting" | "upcoming";
       project_phase:
@@ -885,7 +928,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "client"],
+      app_role: ["admin", "client", "superadmin"],
       doc_status: ["signed", "waiting", "completed", "available"],
       invoice_status: ["paid", "waiting", "upcoming"],
       project_phase: [

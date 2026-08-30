@@ -10,7 +10,7 @@ export type AdminProjectRow =
 export const adminProjectsKey = ["admin", "projects"] as const;
 export const adminRoleKey = ["admin", "role"] as const;
 
-/** Is the signed-in user a super admin? Drives the admin nav + sign-out affordance. */
+/** Is the signed-in user an admin or a superadmin? Drives the admin nav + sign-out affordance. */
 export function useIsAdmin() {
   return useQuery({
     queryKey: adminRoleKey,
@@ -18,7 +18,24 @@ export function useIsAdmin() {
       const { data: auth } = await supabase.auth.getUser();
       const user = auth.user;
       if (!user) return false;
-      const { data } = await supabase.rpc("has_role", { _user_id: user.id, _role: "admin" });
+      const { data } = await supabase.rpc("is_admin_or_above", { _user_id: user.id });
+      return Boolean(data);
+    },
+    staleTime: 60_000,
+  });
+}
+
+export const superadminRoleKey = ["admin", "role", "superadmin"] as const;
+
+/** Is the signed-in user one of the (at most 2) superadmins? Gates destructive/role-management actions. */
+export function useIsSuperadmin() {
+  return useQuery({
+    queryKey: superadminRoleKey,
+    queryFn: async () => {
+      const { data: auth } = await supabase.auth.getUser();
+      const user = auth.user;
+      if (!user) return false;
+      const { data } = await supabase.rpc("has_role", { _user_id: user.id, _role: "superadmin" });
       return Boolean(data);
     },
     staleTime: 60_000,
