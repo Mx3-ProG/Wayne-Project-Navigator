@@ -18,14 +18,17 @@ function requestIp(): string | null {
   return request?.headers.get("x-real-ip") ?? null;
 }
 
+const purposeSchema = z.enum(["login", "password_reset"]).default("login");
+
 const requestCodeSchema = z.object({
   email: z.string().trim().toLowerCase().email(),
+  purpose: purposeSchema,
 });
 
 export const requestLoginCode = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => requestCodeSchema.parse(data))
   .handler(async ({ data }) => {
-    const { email } = data;
+    const { email, purpose } = data;
     const ip = requestIp();
     const now = new Date();
 
@@ -35,6 +38,8 @@ export const requestLoginCode = createServerFn({ method: "POST" })
 
     const windowStart = new Date(now.getTime() - REQUEST_WINDOW_MS).toISOString();
 
+    // Rate limits are counted across all purposes for a given email/IP —
+    // a password-reset flood is just as much abuse as a login-code flood.
     const { count: emailCount } = await supabaseAdmin
       .from("auth_codes")
       .select("id", { count: "exact", head: true })
@@ -57,11 +62,14 @@ export const requestLoginCode = createServerFn({ method: "POST" })
       }
     }
 
-    // A fresh code invalidates any still-pending code for this email.
+    // A fresh code invalidates any still-pending code of the same purpose
+    // for this email (a pending login code is left untouched by a
+    // password-reset request, and vice versa).
     await supabaseAdmin
       .from("auth_codes")
       .update({ used_at: now.toISOString() })
       .eq("email", email)
+      .eq("purpose", purpose)
       .is("used_at", null);
 
     const code = generateLoginCode();
@@ -73,13 +81,15 @@ export const requestLoginCode = createServerFn({ method: "POST" })
       code_hash: codeHash,
       expires_at: expiresAt,
       request_ip: ip,
+      purpose,
     });
     if (insertError) throw new Error("Unable to create login code");
 
     const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
-    await sendTemplateEmail("login-code", email, {
+    const template = purpose === "password_reset" ? "reset-password-code" : "login-code";
+    await sendTemplateEmail(template, email, {
       templateData: { code },
-      idempotencyKey: `login-code-${email}-${now.getTime()}`,
+      idempotencyKey: `${template}-${email}-${now.getTime()}`,
     });
 
     return { ok: true, message: GENERIC_SENT_MESSAGE };
@@ -88,12 +98,13 @@ export const requestLoginCode = createServerFn({ method: "POST" })
 const verifyCodeSchema = z.object({
   email: z.string().trim().toLowerCase().email(),
   code: z.string().length(20),
+  purpose: purposeSchema,
 });
 
 export const verifyLoginCode = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => verifyCodeSchema.parse(data))
   .handler(async ({ data }) => {
-    const { email, code } = data;
+    const { email, code, purpose } = data;
     const now = new Date();
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -104,6 +115,7 @@ export const verifyLoginCode = createServerFn({ method: "POST" })
       .from("auth_codes")
       .select("id, code_hash, expires_at, used_at, attempt_count")
       .eq("email", email)
+      .eq("purpose", purpose)
       .is("used_at", null)
       .order("created_at", { ascending: false })
       .limit(1);

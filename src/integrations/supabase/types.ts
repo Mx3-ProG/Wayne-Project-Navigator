@@ -80,6 +80,7 @@ export type Database = {
           email: string;
           expires_at: string;
           id: string;
+          purpose: string;
           request_ip: string | null;
           used_at: string | null;
         };
@@ -90,6 +91,7 @@ export type Database = {
           email: string;
           expires_at: string;
           id?: string;
+          purpose?: string;
           request_ip?: string | null;
           used_at?: string | null;
         };
@@ -100,6 +102,7 @@ export type Database = {
           email?: string;
           expires_at?: string;
           id?: string;
+          purpose?: string;
           request_ip?: string | null;
           used_at?: string | null;
         };

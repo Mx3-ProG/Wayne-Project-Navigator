@@ -12,6 +12,10 @@ import { useT } from "@/lib/i18n";
 
 const searchSchema = z.object({
   email: z.string().email().optional().catch(undefined),
+  purpose: z.enum(["login", "password_reset"]).optional().catch("login"),
+  // Whitelisted, not a free-form string — an open `redirectTo` on an auth
+  // verification page is an open-redirect vector.
+  redirectTo: z.enum(["/dashboard", "/reset-password"]).optional().catch(undefined),
 });
 
 export const Route = createFileRoute("/verify")({
@@ -27,7 +31,7 @@ const RESEND_COOLDOWN_S = 30;
 function VerifyPage() {
   const navigate = useNavigate();
   const t = useT();
-  const { email: initialEmail } = Route.useSearch();
+  const { email: initialEmail, purpose = "login", redirectTo } = Route.useSearch();
 
   const [email, setEmail] = useState(initialEmail ?? "");
   const [editingEmail, setEditingEmail] = useState(!initialEmail);
@@ -39,10 +43,14 @@ function VerifyPage() {
   const [success, setSuccess] = useState(false);
 
   useEffect(() => {
+    // Only the login flow auto-skips on an existing session — a
+    // password-reset code must always run through verification, even if
+    // the browser already holds a session (possibly for another account).
+    if (purpose !== "login") return;
     supabase.auth.getSession().then(({ data }) => {
       if (data.session) navigate({ to: "/dashboard", replace: true });
     });
-  }, [navigate]);
+  }, [navigate, purpose]);
 
   useEffect(() => {
     if (!initialEmail) return;
@@ -61,7 +69,7 @@ function VerifyPage() {
     setLoading(true);
     try {
       const { tokenHash } = await verifyLoginCode({
-        data: { email: email.trim().toLowerCase(), code: code.trim() },
+        data: { email: email.trim().toLowerCase(), code: code.trim(), purpose },
       });
       const { error: verifyError } = await supabase.auth.verifyOtp({
         token_hash: tokenHash,
@@ -69,7 +77,7 @@ function VerifyPage() {
       });
       if (verifyError) throw verifyError;
       setSuccess(true);
-      navigate({ to: "/dashboard", replace: true });
+      navigate({ to: redirectTo ?? "/dashboard", replace: true });
     } catch (err) {
       setError(err instanceof Error ? err.message : t("auth.toast.error"));
     } finally {
@@ -82,7 +90,7 @@ function VerifyPage() {
     setError(null);
     setResending(true);
     try {
-      await requestLoginCode({ data: { email: email.trim().toLowerCase() } });
+      await requestLoginCode({ data: { email: email.trim().toLowerCase(), purpose } });
       setCooldown(RESEND_COOLDOWN_S);
     } catch (err) {
       setError(err instanceof Error ? err.message : t("auth.toast.error"));
@@ -177,7 +185,10 @@ function VerifyPage() {
                 ? t("auth.verify.resendCooldown", { seconds: cooldown })
                 : t("auth.verify.resend")}
             </button>
-            <Link to="/login" className="hover:underline">
+            <Link
+              to={purpose === "password_reset" ? "/forgot-password" : "/login"}
+              className="hover:underline"
+            >
               {t("auth.verify.backToLogin")}
             </Link>
           </div>

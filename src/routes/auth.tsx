@@ -6,6 +6,7 @@ import { GlassCard } from "@/components/glass/GlassCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PasswordInput } from "@/components/ui/password-input";
 import { supabase } from "@/integrations/supabase/client";
 import { useT } from "@/lib/i18n";
 
@@ -134,15 +135,26 @@ function AuthPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="password">{t("auth.field.password")}</Label>
-              <Input
+              <div className="flex items-center justify-between">
+                <Label htmlFor="password">{t("auth.field.password")}</Label>
+                {mode === "signin" && (
+                  <Link
+                    to="/forgot-password"
+                    className="text-xs font-medium text-primary underline-offset-4 hover:underline"
+                  >
+                    {t("auth.login.forgotPassword")}
+                  </Link>
+                )}
+              </div>
+              <PasswordInput
                 id="password"
-                type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={6}
                 placeholder="••••••••"
+                toggleAriaLabelShow={t("auth.password.show")}
+                toggleAriaLabelHide={t("auth.password.hide")}
               />
             </div>
 

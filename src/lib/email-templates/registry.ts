@@ -1,6 +1,7 @@
 import type { ComponentType } from "react";
 import { template as clientMessageTemplate } from "./client-message";
 import { template as loginCodeTemplate } from "./login-code";
+import { template as resetPasswordCodeTemplate } from "./reset-password-code";
 
 export interface TemplateEntry {
   // Registry is intentionally heterogeneous — each template has its own prop shape.
@@ -26,4 +27,5 @@ export interface TemplateEntry {
 export const TEMPLATES: Record<string, TemplateEntry> = {
   "client-message": clientMessageTemplate,
   "login-code": loginCodeTemplate,
+  "reset-password-code": resetPasswordCodeTemplate,
 };
