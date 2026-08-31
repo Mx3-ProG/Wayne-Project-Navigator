@@ -1,9 +1,10 @@
 import { createFileRoute, Link, Outlet, redirect, useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, LogOut, ShieldCheck } from "lucide-react";
+import { ArrowLeft, Landmark, LogOut, ShieldCheck } from "lucide-react";
 
 import { PreferenceControls } from "@/components/layout/PreferenceControls";
 import { Button } from "@/components/ui/button";
+import { useIsSuperadmin } from "@/hooks/useAdmin";
 import { supabase } from "@/integrations/supabase/client";
 import { useT } from "@/lib/i18n";
 
@@ -26,6 +27,7 @@ function AdminLayout() {
   const t = useT();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { data: isSuperadmin } = useIsSuperadmin();
 
   async function signOut() {
     await queryClient.cancelQueries();
@@ -51,6 +53,14 @@ function AdminLayout() {
           </Link>
           <div className="flex items-center gap-2">
             <PreferenceControls />
+            {isSuperadmin && (
+              <Button asChild variant="ghost" size="sm">
+                <Link to="/admin/ribs">
+                  <Landmark className="mr-1.5 size-4" />
+                  {t("payments.ribs.navLabel")}
+                </Link>
+              </Button>
+            )}
             <Button asChild variant="ghost" size="sm">
               <Link to="/dashboard">
                 <ArrowLeft className="mr-1.5 size-4" />

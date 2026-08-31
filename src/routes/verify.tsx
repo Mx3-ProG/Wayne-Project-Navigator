@@ -12,10 +12,10 @@ import { useT } from "@/lib/i18n";
 
 const searchSchema = z.object({
   email: z.string().email().optional().catch(undefined),
-  purpose: z.enum(["login", "password_reset"]).optional().catch("login"),
+  purpose: z.enum(["login", "password_reset", "admin_login"]).optional().catch("login"),
   // Whitelisted, not a free-form string — an open `redirectTo` on an auth
   // verification page is an open-redirect vector.
-  redirectTo: z.enum(["/dashboard", "/reset-password"]).optional().catch(undefined),
+  redirectTo: z.enum(["/dashboard", "/reset-password", "/admin"]).optional().catch(undefined),
 });
 
 export const Route = createFileRoute("/verify")({
@@ -119,7 +119,9 @@ function VerifyPage() {
 
         <GlassCard variant="strong" interactive={false} className="p-6 sm:p-8">
           <form onSubmit={handleVerify} className="space-y-4">
-            {editingEmail ? (
+            {purpose === "admin_login" ? (
+              <p className="text-sm text-muted-foreground">{email}</p>
+            ) : editingEmail ? (
               <div className="space-y-2">
                 <Label htmlFor="email">{t("auth.field.email")}</Label>
                 <Input
@@ -186,7 +188,13 @@ function VerifyPage() {
                 : t("auth.verify.resend")}
             </button>
             <Link
-              to={purpose === "password_reset" ? "/forgot-password" : "/login"}
+              to={
+                purpose === "password_reset"
+                  ? "/forgot-password"
+                  : purpose === "admin_login"
+                    ? "/admin-login"
+                    : "/login"
+              }
               className="hover:underline"
             >
               {t("auth.verify.backToLogin")}

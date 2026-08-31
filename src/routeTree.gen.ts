@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AdminLoginRouteImport } from './routes/admin-login'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as LoginRouteImport } from './routes/login'
@@ -32,7 +33,9 @@ import { Route as AuthenticatedPortalServicesRouteImport } from './routes/_authe
 import { Route as AuthenticatedPortalSupportRouteImport } from './routes/_authenticated/_portal.support'
 import { Route as AuthenticatedPortalWelcomeRouteImport } from './routes/_authenticated/_portal.welcome'
 import { Route as AuthenticatedAdminAdminProjectIdRouteImport } from './routes/_authenticated/_admin.admin_.$projectId'
+import { Route as AuthenticatedAdminAdminRibsRouteImport } from './routes/_authenticated/_admin.admin_.ribs'
 import { Route as AuthenticatedPortalInvoiceInvoiceIdRouteImport } from './routes/_authenticated/_portal.invoice.$invoiceId'
+import { Route as AuthenticatedPortalPayPaymentRequestIdRouteImport } from './routes/_authenticated/_portal.pay.$paymentRequestId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -41,6 +44,11 @@ const IndexRoute = IndexRouteImport.update({
 } as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminLoginRoute = AdminLoginRouteImport.update({
+  id: '/admin-login',
+  path: '/admin-login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -158,15 +166,28 @@ const AuthenticatedAdminAdminProjectIdRoute =
     path: '/admin/$projectId',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminAdminRibsRoute =
+  AuthenticatedAdminAdminRibsRouteImport.update({
+    id: '/admin_/ribs',
+    path: '/admin/ribs',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedPortalInvoiceInvoiceIdRoute =
   AuthenticatedPortalInvoiceInvoiceIdRouteImport.update({
     id: '/invoice/$invoiceId',
     path: '/invoice/$invoiceId',
     getParentRoute: () => AuthenticatedPortalRoute,
   } as any)
+const AuthenticatedPortalPayPaymentRequestIdRoute =
+  AuthenticatedPortalPayPaymentRequestIdRouteImport.update({
+    id: '/pay/$paymentRequestId',
+    path: '/pay/$paymentRequestId',
+    getParentRoute: () => AuthenticatedPortalRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin-login': typeof AdminLoginRoute
   '/auth': typeof AuthRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
@@ -186,10 +207,13 @@ export interface FileRoutesByFullPath {
   '/support': typeof AuthenticatedPortalSupportRoute
   '/welcome': typeof AuthenticatedPortalWelcomeRoute
   '/admin/$projectId': typeof AuthenticatedAdminAdminProjectIdRoute
+  '/admin/ribs': typeof AuthenticatedAdminAdminRibsRoute
   '/invoice/$invoiceId': typeof AuthenticatedPortalInvoiceInvoiceIdRoute
+  '/pay/$paymentRequestId': typeof AuthenticatedPortalPayPaymentRequestIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin-login': typeof AdminLoginRoute
   '/auth': typeof AuthRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
@@ -209,12 +233,15 @@ export interface FileRoutesByTo {
   '/support': typeof AuthenticatedPortalSupportRoute
   '/welcome': typeof AuthenticatedPortalWelcomeRoute
   '/admin/$projectId': typeof AuthenticatedAdminAdminProjectIdRoute
+  '/admin/ribs': typeof AuthenticatedAdminAdminRibsRoute
   '/invoice/$invoiceId': typeof AuthenticatedPortalInvoiceInvoiceIdRoute
+  '/pay/$paymentRequestId': typeof AuthenticatedPortalPayPaymentRequestIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/admin-login': typeof AdminLoginRoute
   '/auth': typeof AuthRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
@@ -236,12 +263,15 @@ export interface FileRoutesById {
   '/_authenticated/_portal/support': typeof AuthenticatedPortalSupportRoute
   '/_authenticated/_portal/welcome': typeof AuthenticatedPortalWelcomeRoute
   '/_authenticated/_admin/admin_/$projectId': typeof AuthenticatedAdminAdminProjectIdRoute
+  '/_authenticated/_admin/admin_/ribs': typeof AuthenticatedAdminAdminRibsRoute
   '/_authenticated/_portal/invoice/$invoiceId': typeof AuthenticatedPortalInvoiceInvoiceIdRoute
+  '/_authenticated/_portal/pay/$paymentRequestId': typeof AuthenticatedPortalPayPaymentRequestIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/admin-login'
     | '/auth'
     | '/forgot-password'
     | '/login'
@@ -261,10 +291,13 @@ export interface FileRouteTypes {
     | '/support'
     | '/welcome'
     | '/admin/$projectId'
+    | '/admin/ribs'
     | '/invoice/$invoiceId'
+    | '/pay/$paymentRequestId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/admin-login'
     | '/auth'
     | '/forgot-password'
     | '/login'
@@ -284,11 +317,14 @@ export interface FileRouteTypes {
     | '/support'
     | '/welcome'
     | '/admin/$projectId'
+    | '/admin/ribs'
     | '/invoice/$invoiceId'
+    | '/pay/$paymentRequestId'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/admin-login'
     | '/auth'
     | '/forgot-password'
     | '/login'
@@ -310,12 +346,15 @@ export interface FileRouteTypes {
     | '/_authenticated/_portal/support'
     | '/_authenticated/_portal/welcome'
     | '/_authenticated/_admin/admin_/$projectId'
+    | '/_authenticated/_admin/admin_/ribs'
     | '/_authenticated/_portal/invoice/$invoiceId'
+    | '/_authenticated/_portal/pay/$paymentRequestId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AdminLoginRoute: typeof AdminLoginRoute
   AuthRoute: typeof AuthRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
@@ -337,6 +376,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin-login': {
+      id: '/admin-login'
+      path: '/admin-login'
+      fullPath: '/admin-login'
+      preLoaderRoute: typeof AdminLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -486,11 +532,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminAdminProjectIdRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/_admin/admin_/ribs': {
+      id: '/_authenticated/_admin/admin_/ribs'
+      path: '/admin/ribs'
+      fullPath: '/admin/ribs'
+      preLoaderRoute: typeof AuthenticatedAdminAdminRibsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/_portal/invoice/$invoiceId': {
       id: '/_authenticated/_portal/invoice/$invoiceId'
       path: '/invoice/$invoiceId'
       fullPath: '/invoice/$invoiceId'
       preLoaderRoute: typeof AuthenticatedPortalInvoiceInvoiceIdRouteImport
+      parentRoute: typeof AuthenticatedPortalRoute
+    }
+    '/_authenticated/_portal/pay/$paymentRequestId': {
+      id: '/_authenticated/_portal/pay/$paymentRequestId'
+      path: '/pay/$paymentRequestId'
+      fullPath: '/pay/$paymentRequestId'
+      preLoaderRoute: typeof AuthenticatedPortalPayPaymentRequestIdRouteImport
       parentRoute: typeof AuthenticatedPortalRoute
     }
   }
@@ -499,11 +559,13 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminAdminRoute: typeof AuthenticatedAdminAdminRoute
   AuthenticatedAdminAdminProjectIdRoute: typeof AuthenticatedAdminAdminProjectIdRoute
+  AuthenticatedAdminAdminRibsRoute: typeof AuthenticatedAdminAdminRibsRoute
 }
 
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminAdminRoute: AuthenticatedAdminAdminRoute,
   AuthenticatedAdminAdminProjectIdRoute: AuthenticatedAdminAdminProjectIdRoute,
+  AuthenticatedAdminAdminRibsRoute: AuthenticatedAdminAdminRibsRoute,
 }
 
 const AuthenticatedAdminRouteWithChildren =
@@ -522,6 +584,7 @@ interface AuthenticatedPortalRouteChildren {
   AuthenticatedPortalSupportRoute: typeof AuthenticatedPortalSupportRoute
   AuthenticatedPortalWelcomeRoute: typeof AuthenticatedPortalWelcomeRoute
   AuthenticatedPortalInvoiceInvoiceIdRoute: typeof AuthenticatedPortalInvoiceInvoiceIdRoute
+  AuthenticatedPortalPayPaymentRequestIdRoute: typeof AuthenticatedPortalPayPaymentRequestIdRoute
 }
 
 const AuthenticatedPortalRouteChildren: AuthenticatedPortalRouteChildren = {
@@ -538,6 +601,8 @@ const AuthenticatedPortalRouteChildren: AuthenticatedPortalRouteChildren = {
   AuthenticatedPortalWelcomeRoute: AuthenticatedPortalWelcomeRoute,
   AuthenticatedPortalInvoiceInvoiceIdRoute:
     AuthenticatedPortalInvoiceInvoiceIdRoute,
+  AuthenticatedPortalPayPaymentRequestIdRoute:
+    AuthenticatedPortalPayPaymentRequestIdRoute,
 }
 
 const AuthenticatedPortalRouteWithChildren =
@@ -561,6 +626,7 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AdminLoginRoute: AdminLoginRoute,
   AuthRoute: AuthRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,

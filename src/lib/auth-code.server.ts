@@ -5,6 +5,7 @@ import { createHash, randomInt, timingSafeEqual } from "node:crypto";
 
 export const LOGIN_CODE_LENGTH = 20;
 export const LOGIN_CODE_TTL_MS = 10 * 60 * 1000;
+export const ADMIN_CODE_TTL_MS = 5 * 60 * 1000;
 export const LOGIN_CODE_MAX_ATTEMPTS = 5;
 
 // Alphanumeric + a curated set of symbols — no ambiguous/lookalike characters

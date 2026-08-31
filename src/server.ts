@@ -46,6 +46,16 @@ function isH3SwallowedErrorBody(body: string): boolean {
 
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
+    // Stripe webhooks need the raw request body + a custom header and are
+    // never CSRF-protected (Stripe, not a browser, is the caller) — intercept
+    // before the TanStack Start handler, which would otherwise route this
+    // through the CSRF-guarded serverFn machinery.
+    const url = new URL(request.url);
+    if (url.pathname === "/api/webhooks/stripe" && request.method === "POST") {
+      const { handleStripeWebhook } = await import("./lib/stripe/webhook-handler");
+      return handleStripeWebhook(request);
+    }
+
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);

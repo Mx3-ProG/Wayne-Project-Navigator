@@ -155,6 +155,27 @@ export type Database = {
           },
         ];
       };
+      billing_settings: {
+        Row: {
+          default_deposit_percentage: number;
+          id: number;
+          updated_at: string;
+          updated_by: string | null;
+        };
+        Insert: {
+          default_deposit_percentage?: number;
+          id?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Update: {
+          default_deposit_percentage?: number;
+          id?: number;
+          updated_at?: string;
+          updated_by?: string | null;
+        };
+        Relationships: [];
+      };
       clients: {
         Row: {
           created_at: string;
@@ -162,6 +183,7 @@ export type Database = {
           industry: string | null;
           logo_url: string | null;
           name: string;
+          stripe_customer_id: string | null;
           updated_at: string;
           website: string | null;
         };
@@ -171,6 +193,7 @@ export type Database = {
           industry?: string | null;
           logo_url?: string | null;
           name: string;
+          stripe_customer_id?: string | null;
           updated_at?: string;
           website?: string | null;
         };
@@ -180,10 +203,97 @@ export type Database = {
           industry?: string | null;
           logo_url?: string | null;
           name?: string;
+          stripe_customer_id?: string | null;
           updated_at?: string;
           website?: string | null;
         };
         Relationships: [];
+      };
+      payment_requests: {
+        Row: {
+          amount: number;
+          canceled_at: string | null;
+          client_id: string;
+          created_at: string;
+          created_by: string | null;
+          currency: string;
+          id: string;
+          idempotency_key: string;
+          invoice_id: string;
+          method: string;
+          paid_at: string | null;
+          project_id: string;
+          rib_id: string | null;
+          status: string;
+          stripe_payment_intent_id: string | null;
+          type: string;
+        };
+        Insert: {
+          amount: number;
+          canceled_at?: string | null;
+          client_id: string;
+          created_at?: string;
+          created_by?: string | null;
+          currency?: string;
+          id?: string;
+          idempotency_key: string;
+          invoice_id: string;
+          method?: string;
+          paid_at?: string | null;
+          project_id: string;
+          rib_id?: string | null;
+          status?: string;
+          stripe_payment_intent_id?: string | null;
+          type: string;
+        };
+        Update: {
+          amount?: number;
+          canceled_at?: string | null;
+          client_id?: string;
+          created_at?: string;
+          created_by?: string | null;
+          currency?: string;
+          id?: string;
+          idempotency_key?: string;
+          invoice_id?: string;
+          method?: string;
+          paid_at?: string | null;
+          project_id?: string;
+          rib_id?: string | null;
+          status?: string;
+          stripe_payment_intent_id?: string | null;
+          type?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "payment_requests_invoice_id_fkey";
+            columns: ["invoice_id"];
+            isOneToOne: false;
+            referencedRelation: "invoices";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "payment_requests_project_id_fkey";
+            columns: ["project_id"];
+            isOneToOne: false;
+            referencedRelation: "projects";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "payment_requests_client_id_fkey";
+            columns: ["client_id"];
+            isOneToOne: false;
+            referencedRelation: "clients";
+            referencedColumns: ["id"];
+          },
+          {
+            foreignKeyName: "payment_requests_rib_id_fkey";
+            columns: ["rib_id"];
+            isOneToOne: false;
+            referencedRelation: "payment_ribs";
+            referencedColumns: ["id"];
+          },
+        ];
       };
       documents: {
         Row: {
@@ -274,42 +384,63 @@ export type Database = {
         Row: {
           amount: number;
           created_at: string;
+          currency: string;
+          deposit_amount: number | null;
+          deposit_percentage: number | null;
+          deposit_type: string | null;
           due_date: string | null;
           i18n_key: string | null;
           id: string;
           label: string;
           label_override: string | null;
           paid_at: string | null;
+          paid_total: number;
+          payment_status: string;
           payment_url: string | null;
           project_id: string;
+          reconciliation_flag: boolean;
           reference: string | null;
           status: Database["public"]["Enums"]["invoice_status"];
         };
         Insert: {
           amount?: number;
           created_at?: string;
+          currency?: string;
+          deposit_amount?: number | null;
+          deposit_percentage?: number | null;
+          deposit_type?: string | null;
           due_date?: string | null;
           i18n_key?: string | null;
           id?: string;
           label: string;
           label_override?: string | null;
           paid_at?: string | null;
+          paid_total?: number;
+          payment_status?: string;
           payment_url?: string | null;
           project_id: string;
+          reconciliation_flag?: boolean;
           reference?: string | null;
           status?: Database["public"]["Enums"]["invoice_status"];
         };
         Update: {
           amount?: number;
           created_at?: string;
+          currency?: string;
+          deposit_amount?: number | null;
+          deposit_percentage?: number | null;
+          deposit_type?: string | null;
           due_date?: string | null;
           i18n_key?: string | null;
           id?: string;
           label?: string;
           label_override?: string | null;
           paid_at?: string | null;
+          paid_total?: number;
+          payment_status?: string;
           payment_url?: string | null;
           project_id?: string;
+          reconciliation_flag?: boolean;
           reference?: string | null;
           status?: Database["public"]["Enums"]["invoice_status"];
         };
@@ -322,6 +453,36 @@ export type Database = {
             referencedColumns: ["id"];
           },
         ];
+      };
+      payment_ribs: {
+        Row: {
+          active: boolean;
+          created_at: string;
+          created_by: string;
+          holder_name: string;
+          id: string;
+          label: string;
+          vault_secret_id: string;
+        };
+        Insert: {
+          active?: boolean;
+          created_at?: string;
+          created_by: string;
+          holder_name: string;
+          id?: string;
+          label: string;
+          vault_secret_id: string;
+        };
+        Update: {
+          active?: boolean;
+          created_at?: string;
+          created_by?: string;
+          holder_name?: string;
+          id?: string;
+          label?: string;
+          vault_secret_id?: string;
+        };
+        Relationships: [];
       };
       milestones: {
         Row: {
@@ -738,6 +899,42 @@ export type Database = {
       is_project_member: { Args: { _project_id: string }; Returns: boolean };
       is_superadmin: { Args: { _user_id: string }; Returns: boolean };
       mark_invoice_paid: { Args: { _invoice_id: string }; Returns: undefined };
+      set_invoice_deposit: {
+        Args: { _deposit_type: string; _deposit_value: number; _invoice_id: string };
+        Returns: undefined;
+      };
+      set_default_deposit_percentage: { Args: { _pct: number }; Returns: undefined };
+      create_payment_request: {
+        Args: {
+          _amount: number;
+          _idempotency_key: string;
+          _invoice_id: string;
+          _method?: string;
+          _rib_id?: string;
+          _type: string;
+        };
+        Returns: string;
+      };
+      cancel_payment_request: { Args: { _id: string }; Returns: undefined };
+      recompute_invoice_totals: { Args: { _invoice_id: string }; Returns: undefined };
+      service_confirm_payment_request: {
+        Args: { _payment_intent_id: string };
+        Returns: undefined;
+      };
+      service_fail_payment_request: { Args: { _payment_intent_id: string }; Returns: undefined };
+      service_cancel_payment_request_by_pi: {
+        Args: { _payment_intent_id: string };
+        Returns: undefined;
+      };
+      service_refund_payment_request: { Args: { _payment_intent_id: string }; Returns: undefined };
+      record_stripe_event: {
+        Args: { _id: string; _payload: Json; _type: string };
+        Returns: boolean;
+      };
+      get_rib_details: {
+        Args: { _project_id: string; _rib_id: string };
+        Returns: { bic: string | null; holder_name: string; iban: string; label: string }[];
+      };
       reopen_brief: { Args: { _project_id: string }; Returns: undefined };
       save_business_profile: {
         Args: { _profile: Json; _project_id: string; _submit?: boolean };
@@ -768,6 +965,25 @@ export type Database = {
           _project_id: string;
           _project_type?: string | null;
           _unsure?: boolean;
+        };
+        Returns: undefined;
+      };
+      superadmin_create_rib: {
+        Args: { _bic: string; _holder_name: string; _iban: string; _label: string };
+        Returns: string;
+      };
+      superadmin_delete_rib: { Args: { _rib_id: string }; Returns: undefined };
+      superadmin_set_rib_active: {
+        Args: { _active: boolean; _rib_id: string };
+        Returns: undefined;
+      };
+      superadmin_update_rib: {
+        Args: {
+          _bic: string;
+          _holder_name: string;
+          _iban: string;
+          _label: string;
+          _rib_id: string;
         };
         Returns: undefined;
       };

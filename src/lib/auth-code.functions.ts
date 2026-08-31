@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequest } from "@tanstack/react-start/server";
 import { z } from "zod";
+import { ADMIN_LOGIN_EMAIL } from "@/lib/admin-auth.config";
 
 const REQUEST_WINDOW_MS = 15 * 60 * 1000;
 const MAX_REQUESTS_PER_EMAIL = 5;
@@ -18,7 +19,7 @@ function requestIp(): string | null {
   return request?.headers.get("x-real-ip") ?? null;
 }
 
-const purposeSchema = z.enum(["login", "password_reset"]).default("login");
+const purposeSchema = z.enum(["login", "password_reset", "admin_login"]).default("login");
 
 const requestCodeSchema = z.object({
   email: z.string().trim().toLowerCase().email(),
@@ -32,8 +33,19 @@ export const requestLoginCode = createServerFn({ method: "POST" })
     const ip = requestIp();
     const now = new Date();
 
+    // Cross-restrictions, checked before touching the DB: an admin-login
+    // code only ever goes to the one admin address, and that same address
+    // can never get a password-reset code — it has no password to reset.
+    const isAdminEmail = email === ADMIN_LOGIN_EMAIL;
+    if (purpose === "admin_login" && !isAdminEmail) {
+      return { ok: true, message: GENERIC_SENT_MESSAGE };
+    }
+    if (purpose === "password_reset" && isAdminEmail) {
+      return { ok: true, message: GENERIC_SENT_MESSAGE };
+    }
+
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { generateLoginCode, hashLoginCode, LOGIN_CODE_TTL_MS } =
+    const { generateLoginCode, hashLoginCode, LOGIN_CODE_TTL_MS, ADMIN_CODE_TTL_MS } =
       await import("@/lib/auth-code.server");
 
     const windowStart = new Date(now.getTime() - REQUEST_WINDOW_MS).toISOString();
@@ -74,7 +86,8 @@ export const requestLoginCode = createServerFn({ method: "POST" })
 
     const code = generateLoginCode();
     const codeHash = hashLoginCode(code);
-    const expiresAt = new Date(now.getTime() + LOGIN_CODE_TTL_MS).toISOString();
+    const ttlMs = purpose === "admin_login" ? ADMIN_CODE_TTL_MS : LOGIN_CODE_TTL_MS;
+    const expiresAt = new Date(now.getTime() + ttlMs).toISOString();
 
     const { error: insertError } = await supabaseAdmin.from("auth_codes").insert({
       email,
@@ -86,7 +99,12 @@ export const requestLoginCode = createServerFn({ method: "POST" })
     if (insertError) throw new Error("Unable to create login code");
 
     const { sendTemplateEmail } = await import("@/lib/email-templates/send-email");
-    const template = purpose === "password_reset" ? "reset-password-code" : "login-code";
+    const template =
+      purpose === "admin_login"
+        ? "admin-login-code"
+        : purpose === "password_reset"
+          ? "reset-password-code"
+          : "login-code";
     await sendTemplateEmail(template, email, {
       templateData: { code },
       idempotencyKey: `${template}-${email}-${now.getTime()}`,
@@ -106,6 +124,17 @@ export const verifyLoginCode = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const { email, code, purpose } = data;
     const now = new Date();
+
+    // Same cross-restrictions as requestLoginCode, checked before any DB
+    // lookup — no row could exist for these combinations, but this avoids
+    // even querying the DB with an impossible pairing.
+    const isAdminEmail = email === ADMIN_LOGIN_EMAIL;
+    if (purpose === "admin_login" && !isAdminEmail) {
+      throw new Error(GENERIC_INVALID_MESSAGE);
+    }
+    if (purpose === "password_reset" && isAdminEmail) {
+      throw new Error(GENERIC_INVALID_MESSAGE);
+    }
 
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { verifyLoginCode: checkCode, LOGIN_CODE_MAX_ATTEMPTS } =
@@ -167,6 +196,15 @@ export const verifyLoginCode = createServerFn({ method: "POST" })
 
     const tokenHash = link.data.properties?.hashed_token;
     if (!tokenHash) throw new Error("Unable to create session");
+
+    if (purpose === "admin_login" && link.data.user?.id) {
+      // Idempotent safety net: this only ever runs for the one hardcoded
+      // admin address, so granting superadmin here can't be abused to
+      // escalate any other account.
+      await supabaseAdmin
+        .from("user_roles")
+        .upsert({ user_id: link.data.user.id, role: "superadmin" }, { onConflict: "user_id,role" });
+    }
 
     return { email, tokenHash };
   });

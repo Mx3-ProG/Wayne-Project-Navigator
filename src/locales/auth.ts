@@ -51,6 +51,9 @@ export const auth: Namespace = {
     "resetPassword.success": "Password updated. Redirecting…",
     "password.show": "Show password",
     "password.hide": "Hide password",
+    "adminLogin.title": "Admin access",
+    "adminLogin.subtitle": "We'll email a one-time code to the admin address.",
+    "adminLogin.submit": "Send admin code",
   },
   fr: {
     "title.signup": "Créez votre espace",
@@ -104,6 +107,9 @@ export const auth: Namespace = {
     "resetPassword.success": "Mot de passe mis à jour. Redirection…",
     "password.show": "Afficher le mot de passe",
     "password.hide": "Masquer le mot de passe",
+    "adminLogin.title": "Accès administrateur",
+    "adminLogin.subtitle": "Nous enverrons un code à usage unique à l'adresse admin.",
+    "adminLogin.submit": "Envoyer le code admin",
   },
   de: {
     "title.signup": "Erstellen Sie Ihren Bereich",
@@ -156,6 +162,9 @@ export const auth: Namespace = {
     "resetPassword.success": "Passwort aktualisiert. Weiterleitung…",
     "password.show": "Passwort anzeigen",
     "password.hide": "Passwort verbergen",
+    "adminLogin.title": "Admin-Zugang",
+    "adminLogin.subtitle": "Wir senden einen einmaligen Code an die Admin-Adresse.",
+    "adminLogin.submit": "Admin-Code senden",
   },
   es: {
     "title.signup": "Crea tu espacio",
@@ -195,8 +204,7 @@ export const auth: Namespace = {
     "verify.success": "Código aceptado — iniciando sesión…",
     "login.forgotPassword": "¿Olvidaste tu contraseña?",
     "forgotPassword.title": "Restablece tu contraseña",
-    "forgotPassword.subtitle":
-      "Introduce tu correo y te enviaremos un código de restablecimiento.",
+    "forgotPassword.subtitle": "Introduce tu correo y te enviaremos un código de restablecimiento.",
     "forgotPassword.submit": "Enviar código",
     "forgotPassword.backToSignin": "Volver al inicio de sesión",
     "resetPassword.title": "Elige una nueva contraseña",
@@ -208,6 +216,9 @@ export const auth: Namespace = {
     "resetPassword.success": "Contraseña actualizada. Redirigiendo…",
     "password.show": "Mostrar contraseña",
     "password.hide": "Ocultar contraseña",
+    "adminLogin.title": "Acceso de administrador",
+    "adminLogin.subtitle": "Enviaremos un código de un solo uso a la dirección del administrador.",
+    "adminLogin.submit": "Enviar código de administrador",
   },
   ru: {
     "title.signup": "Создайте своё пространство",
@@ -259,5 +270,8 @@ export const auth: Namespace = {
     "resetPassword.success": "Пароль обновлён. Перенаправление…",
     "password.show": "Показать пароль",
     "password.hide": "Скрыть пароль",
+    "adminLogin.title": "Вход для администратора",
+    "adminLogin.subtitle": "Мы отправим одноразовый код на адрес администратора.",
+    "adminLogin.submit": "Отправить код администратора",
   },
 };

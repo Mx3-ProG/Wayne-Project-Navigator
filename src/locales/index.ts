@@ -11,6 +11,7 @@ import { documents } from "./documents";
 import { journey } from "./journey";
 import { landing } from "./landing";
 import { onboarding } from "./onboarding";
+import { payments } from "./payments";
 import { profile } from "./profile";
 import { project } from "./project";
 import { services } from "./services";
@@ -29,6 +30,7 @@ export const dictionaries: Record<string, Namespace> = {
   journey,
   landing,
   onboarding,
+  payments,
   profile,
   project,
   services,

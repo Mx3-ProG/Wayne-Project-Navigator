@@ -17,6 +17,13 @@ import { GlassCard } from "@/components/glass/GlassCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import type { Invoice } from "@/lib/journey";
@@ -25,8 +32,15 @@ import {
   useAdminMarkPaid,
   useAdminUpdateInvoice,
   useAdminProject,
+  useCancelPaymentRequest,
+  useCreatePaymentRequest,
+  useIsSuperadmin,
+  usePaymentRequests,
+  usePaymentRibs,
   useSaveOffer,
+  useSetInvoiceDeposit,
   useUnpublishOffer,
+  type PaymentRequest,
 } from "@/hooks/useAdmin";
 import { useAttachmentUrl } from "@/hooks/useAttachments";
 import { BUSINESS_SECTIONS, parseBusinessProfile, requiredProgress } from "@/lib/business-profile";
@@ -569,7 +583,284 @@ function AdminInvoiceRow({ projectId, invoice }: { projectId: string; invoice: I
           </Button>
         </div>
       )}
+      <StripeDepositPanel projectId={projectId} invoice={invoice} />
     </div>
+  );
+}
+
+/**
+ * Real Stripe deposit + payment-request management for one invoice.
+ * Deposit pricing is superadmin-only; sending/cancelling a request (or
+ * viewing history) is any assigned admin — enforced server-side by the
+ * `set_invoice_deposit` / `create_payment_request` RPCs, mirrored here only
+ * for UI affordance.
+ */
+function StripeDepositPanel({ projectId, invoice }: { projectId: string; invoice: Invoice }) {
+  const { t, locale } = useI18n();
+  const { data: isSuperadmin } = useIsSuperadmin();
+  const setDeposit = useSetInvoiceDeposit(projectId);
+  const { data: requests } = usePaymentRequests(invoice.id);
+  const { data: ribs } = usePaymentRibs();
+  const createRequest = useCreatePaymentRequest(projectId, invoice.id);
+  const cancelRequest = useCancelPaymentRequest(projectId, invoice.id);
+
+  const [depositType, setDepositType] = useState<"percentage" | "fixed">(
+    (invoice.deposit_type as "percentage" | "fixed") ?? "percentage",
+  );
+  const [depositValue, setDepositValue] = useState(
+    String(invoice.deposit_percentage ?? invoice.deposit_amount ?? 30),
+  );
+  const [requestAmount, setRequestAmount] = useState("");
+  const [requestKey, setRequestKey] = useState(() => crypto.randomUUID());
+  const [method, setMethod] = useState<"stripe" | "rib">("stripe");
+  const [ribId, setRibId] = useState("");
+  const activeRibs = (ribs ?? []).filter((r) => r.active);
+
+  const total = Number(invoice.amount) || 0;
+  const paid = Number(invoice.paid_total) || 0;
+  const pending = (requests ?? [])
+    .filter((r) => r.status === "pending")
+    .reduce((sum, r) => sum + Number(r.amount), 0);
+  const remaining = Math.max(0, total - paid - pending);
+  const previewDeposit =
+    depositType === "percentage"
+      ? Math.round(total * (Number(depositValue) || 0)) / 100
+      : Number(depositValue) || 0;
+
+  async function saveDeposit() {
+    try {
+      await setDeposit.mutateAsync({
+        invoiceId: invoice.id,
+        depositType,
+        depositValue: Number(depositValue) || 0,
+      });
+      toast.success(t("payments.deposit.saved"));
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : t("payments.deposit.error"));
+    }
+  }
+
+  async function sendRequest(type: "deposit" | "partial" | "balance", amount: number) {
+    if (amount <= 0 || amount > remaining) return;
+    if (method === "rib" && !ribId) return;
+    try {
+      await createRequest.mutateAsync({
+        amount,
+        type,
+        idempotencyKey: requestKey,
+        method,
+        ...(method === "rib" ? { ribId } : {}),
+      });
+      toast.success(t("payments.request.sent"));
+      setRequestAmount("");
+      setRequestKey(crypto.randomUUID());
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : t("payments.request.error"));
+    }
+  }
+
+  return (
+    <div className="mt-4 rounded-xl border border-primary/30 bg-primary/5 p-4 text-sm">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
+        {t("payments.panel.title")}
+      </p>
+
+      {isSuperadmin ? (
+        <div className="mt-3 grid gap-3 sm:grid-cols-[140px_140px_auto] sm:items-end">
+          <div className="space-y-1.5">
+            <Label>{t("payments.deposit.type")}</Label>
+            <select
+              className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm"
+              value={depositType}
+              onChange={(event) => setDepositType(event.target.value as "percentage" | "fixed")}
+            >
+              <option value="percentage">{t("payments.deposit.percentage")}</option>
+              <option value="fixed">{t("payments.deposit.fixed")}</option>
+            </select>
+          </div>
+          <div className="space-y-1.5">
+            <Label>
+              {depositType === "percentage"
+                ? t("payments.deposit.value.pct")
+                : t("payments.deposit.value.amount")}
+            </Label>
+            <Input
+              type="number"
+              min={0}
+              value={depositValue}
+              onChange={(event) => setDepositValue(event.target.value)}
+            />
+          </div>
+          <Button size="sm" disabled={setDeposit.isPending} onClick={saveDeposit}>
+            {t("payments.deposit.save")}
+          </Button>
+        </div>
+      ) : null}
+
+      {invoice.deposit_amount ? (
+        <p className="mt-3 text-xs text-muted-foreground">
+          {t("payments.deposit.preview", {
+            total: formatMoney(total, locale),
+            deposit: formatMoney(invoice.deposit_amount, locale),
+            remaining: formatMoney(total - invoice.deposit_amount, locale),
+          })}
+        </p>
+      ) : isSuperadmin && Number(depositValue) > 0 ? (
+        <p className="mt-3 text-xs text-muted-foreground">
+          {t("payments.deposit.preview", {
+            total: formatMoney(total, locale),
+            deposit: formatMoney(previewDeposit, locale),
+            remaining: formatMoney(total - previewDeposit, locale),
+          })}
+        </p>
+      ) : null}
+
+      <div className="mt-4 grid grid-cols-3 gap-3 text-center">
+        <div>
+          <p className="text-[10px] uppercase text-muted-foreground">{t("payments.stats.paid")}</p>
+          <p className="font-semibold">{formatMoney(paid, locale)}</p>
+        </div>
+        <div>
+          <p className="text-[10px] uppercase text-muted-foreground">
+            {t("payments.stats.pending")}
+          </p>
+          <p className="font-semibold">{formatMoney(pending, locale)}</p>
+        </div>
+        <div>
+          <p className="text-[10px] uppercase text-muted-foreground">
+            {t("payments.stats.remaining")}
+          </p>
+          <p className="font-semibold">{formatMoney(remaining, locale)}</p>
+        </div>
+      </div>
+
+      {remaining > 0 && (
+        <div className="mt-4 space-y-3">
+          <div className="flex flex-wrap items-end gap-2">
+            <div className="space-y-1.5">
+              <Label>{t("payments.request.method")}</Label>
+              <Select value={method} onValueChange={(v) => setMethod(v as "stripe" | "rib")}>
+                <SelectTrigger className="h-9 w-[160px]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="stripe">{t("payments.request.methodStripe")}</SelectItem>
+                  <SelectItem value="rib">{t("payments.request.methodRib")}</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {method === "rib" && (
+              <div className="space-y-1.5">
+                <Label>{t("payments.request.selectRib")}</Label>
+                <Select value={ribId} onValueChange={setRibId}>
+                  <SelectTrigger className="h-9 w-[220px]">
+                    <SelectValue placeholder={t("payments.request.selectRib")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {activeRibs.map((rib) => (
+                      <SelectItem key={rib.id} value={rib.id}>
+                        {rib.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+          </div>
+          <div className="flex flex-wrap items-end gap-2">
+            <div className="space-y-1.5">
+              <Label>{t("payments.request.amount")}</Label>
+              <Input
+                type="number"
+                min={0}
+                max={remaining}
+                value={requestAmount}
+                onChange={(event) => setRequestAmount(event.target.value)}
+                placeholder={String(remaining)}
+              />
+            </div>
+            <Button
+              size="sm"
+              variant="secondary"
+              disabled={createRequest.isPending || (method === "rib" && !ribId)}
+              onClick={() => sendRequest("partial", Number(requestAmount) || 0)}
+            >
+              {t("payments.request.send")}
+            </Button>
+            <Button
+              size="sm"
+              disabled={createRequest.isPending || (method === "rib" && !ribId)}
+              onClick={() =>
+                sendRequest(
+                  invoice.paid_total > 0 ? "balance" : "deposit",
+                  invoice.deposit_amount && paid === 0 ? invoice.deposit_amount : remaining,
+                )
+              }
+            >
+              {invoice.deposit_amount && paid === 0
+                ? t("payments.request.sendDeposit")
+                : t("payments.request.sendRemaining")}
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {requests && requests.length > 0 && (
+        <ul className="mt-4 space-y-1.5">
+          {requests.map((request) => (
+            <PaymentRequestRow key={request.id} request={request} onCancel={cancelRequest} />
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+function PaymentRequestRow({
+  request,
+  onCancel,
+}: {
+  request: PaymentRequest;
+  onCancel: ReturnType<typeof useCancelPaymentRequest>;
+}) {
+  const { t, locale } = useI18n();
+  const statusKey: Record<string, string> = {
+    pending: "payments.status.pending",
+    paid: "payments.status.paid",
+    canceled: "payments.status.canceled",
+    failed: "payments.status.failed",
+    refunded: "payments.status.refunded",
+  };
+  return (
+    <li className="flex items-center justify-between gap-3 rounded-lg border border-border/60 bg-background/60 px-3 py-2 text-xs">
+      <span>
+        {formatMoney(request.amount, locale)} ·{" "}
+        {t(statusKey[request.status] ?? "payments.status.pending")}
+      </span>
+      <span className="flex items-center gap-2">
+        {request.status === "paid" && request.stripe_payment_intent_id && (
+          <a
+            href={`https://dashboard.stripe.com/test/payments/${request.stripe_payment_intent_id}`}
+            target="_blank"
+            rel="noreferrer"
+            className="text-primary hover:underline"
+          >
+            {t("payments.viewInStripe")}
+          </a>
+        )}
+        {request.status === "pending" && (
+          <Button
+            size="sm"
+            variant="ghost"
+            className="h-6 px-2 text-xs"
+            disabled={onCancel.isPending}
+            onClick={() => onCancel.mutate(request.id)}
+          >
+            {t("payments.request.cancel")}
+          </Button>
+        )}
+      </span>
+    </li>
   );
 }
 

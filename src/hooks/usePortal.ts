@@ -12,8 +12,10 @@ import type {
   Project,
   ProjectLink,
 } from "@/lib/journey";
+import { getPaymentIntentClientSecret } from "@/lib/stripe/server-functions";
 
 export type Offer = Database["public"]["Tables"]["offers"]["Row"];
+export type PaymentRequest = Database["public"]["Tables"]["payment_requests"]["Row"];
 
 export type Workspace = {
   profile: Profile;
@@ -26,6 +28,7 @@ export type Workspace = {
   brief: Brief | null;
   agreement: Agreement | null;
   offer: Offer | null;
+  paymentRequests: PaymentRequest[];
 };
 
 async function fetchWorkspace(): Promise<Workspace | null> {
@@ -45,19 +48,25 @@ async function fetchWorkspace(): Promise<Workspace | null> {
   const project = projects?.[0] as (Project & { clients?: { name: string } | null }) | undefined;
   if (!profile || !project) return null;
 
-  const [milestones, invoices, documents, links, brief, agreement, offer] = await Promise.all([
-    supabase.from("milestones").select("*").eq("project_id", project.id).order("position"),
-    supabase.from("invoices").select("*").eq("project_id", project.id).order("due_date"),
-    supabase
-      .from("documents")
-      .select("*")
-      .eq("project_id", project.id)
-      .order("created_at", { ascending: true }),
-    supabase.from("project_links").select("*").eq("project_id", project.id),
-    supabase.from("briefs").select("*").eq("project_id", project.id).maybeSingle(),
-    supabase.from("agreements").select("*").eq("project_id", project.id).maybeSingle(),
-    supabase.from("offers").select("*").eq("project_id", project.id).maybeSingle(),
-  ]);
+  const [milestones, invoices, documents, links, brief, agreement, offer, paymentRequests] =
+    await Promise.all([
+      supabase.from("milestones").select("*").eq("project_id", project.id).order("position"),
+      supabase.from("invoices").select("*").eq("project_id", project.id).order("due_date"),
+      supabase
+        .from("documents")
+        .select("*")
+        .eq("project_id", project.id)
+        .order("created_at", { ascending: true }),
+      supabase.from("project_links").select("*").eq("project_id", project.id),
+      supabase.from("briefs").select("*").eq("project_id", project.id).maybeSingle(),
+      supabase.from("agreements").select("*").eq("project_id", project.id).maybeSingle(),
+      supabase.from("offers").select("*").eq("project_id", project.id).maybeSingle(),
+      supabase
+        .from("payment_requests")
+        .select("*")
+        .eq("project_id", project.id)
+        .order("created_at", { ascending: false }),
+    ]);
 
   return {
     profile: profile as Profile,
@@ -70,6 +79,7 @@ async function fetchWorkspace(): Promise<Workspace | null> {
     brief: (brief.data ?? null) as Brief | null,
     agreement: (agreement.data ?? null) as Agreement | null,
     offer: (offer.data ?? null) as Offer | null,
+    paymentRequests: paymentRequests.data ?? [],
   };
 }
 
@@ -264,6 +274,25 @@ export function useSubmitFeedback() {
       if (error) throw error;
     },
     onSuccess: invalidate,
+  });
+}
+
+/**
+ * Opens the payment form for one request. The client_secret is transient —
+ * never persisted client-side beyond this in-memory query — and the server
+ * refuses to hand one out for a request that isn't still `pending`.
+ */
+export function usePaymentIntentSecret(paymentRequestId: string | undefined) {
+  return useQuery({
+    queryKey: ["payment-intent-secret", paymentRequestId],
+    queryFn: async () => {
+      if (!paymentRequestId) return null;
+      return getPaymentIntentClientSecret({ data: { paymentRequestId } });
+    },
+    enabled: Boolean(paymentRequestId),
+    staleTime: 0,
+    gcTime: 0,
+    retry: false,
   });
 }
 

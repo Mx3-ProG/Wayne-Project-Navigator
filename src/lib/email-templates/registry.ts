@@ -1,6 +1,9 @@
 import type { ComponentType } from "react";
+import { template as adminLoginCodeTemplate } from "./admin-login-code";
 import { template as clientMessageTemplate } from "./client-message";
 import { template as loginCodeTemplate } from "./login-code";
+import { template as paymentRequestTemplate } from "./payment-request";
+import { template as paymentRequestCreatedTemplate } from "./payment-request-created";
 import { template as resetPasswordCodeTemplate } from "./reset-password-code";
 
 export interface TemplateEntry {
@@ -28,4 +31,7 @@ export const TEMPLATES: Record<string, TemplateEntry> = {
   "client-message": clientMessageTemplate,
   "login-code": loginCodeTemplate,
   "reset-password-code": resetPasswordCodeTemplate,
+  "admin-login-code": adminLoginCodeTemplate,
+  "payment-request": paymentRequestTemplate,
+  "payment-request-created": paymentRequestCreatedTemplate,
 };

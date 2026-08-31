@@ -2,6 +2,12 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 import type { Agreement, Brief, Document, Invoice, Milestone, Phase, Project } from "@/lib/journey";
+import {
+  cancelPaymentRequest as cancelPaymentRequestFn,
+  createPaymentRequest as createPaymentRequestFn,
+  setDefaultDepositPercentage as setDefaultDepositPercentageFn,
+  setInvoiceDeposit as setInvoiceDepositFn,
+} from "@/lib/stripe/server-functions";
 
 export type Offer = Database["public"]["Tables"]["offers"]["Row"];
 export type AdminProjectRow =
@@ -274,5 +280,211 @@ export function useDeleteProjectNote(projectId: string) {
       if (error) throw error;
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: projectNotesKey(projectId) }),
+  });
+}
+
+export type PaymentRib = Database["public"]["Tables"]["payment_ribs"]["Row"];
+
+export const paymentRibsKey = ["admin", "payment-ribs"] as const;
+
+/** All RIBs (active or not) an admin-or-above can see — the IBAN/BIC are never included. */
+export function usePaymentRibs() {
+  return useQuery({
+    queryKey: paymentRibsKey,
+    queryFn: async (): Promise<PaymentRib[]> => {
+      const { data, error } = await supabase
+        .from("payment_ribs")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data ?? [];
+    },
+    staleTime: 60_000,
+  });
+}
+
+/** Superadmin-only: create a RIB. The IBAN/BIC are encrypted server-side (Vault) and never returned. */
+export function useCreateRib() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (input: { label: string; holderName: string; iban: string; bic: string }) => {
+      const { error } = await supabase.rpc("superadmin_create_rib", {
+        _label: input.label,
+        _holder_name: input.holderName,
+        _iban: input.iban,
+        _bic: input.bic,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: paymentRibsKey }),
+  });
+}
+
+export function useUpdateRib() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (input: {
+      ribId: string;
+      label: string;
+      holderName: string;
+      iban: string;
+      bic: string;
+    }) => {
+      const { error } = await supabase.rpc("superadmin_update_rib", {
+        _rib_id: input.ribId,
+        _label: input.label,
+        _holder_name: input.holderName,
+        _iban: input.iban,
+        _bic: input.bic,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: paymentRibsKey }),
+  });
+}
+
+export function useSetRibActive() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (input: { ribId: string; active: boolean }) => {
+      const { error } = await supabase.rpc("superadmin_set_rib_active", {
+        _rib_id: input.ribId,
+        _active: input.active,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: paymentRibsKey }),
+  });
+}
+
+export function useDeleteRib() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (ribId: string) => {
+      const { error } = await supabase.rpc("superadmin_delete_rib", { _rib_id: ribId });
+      if (error) throw error;
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: paymentRibsKey }),
+  });
+}
+
+// --- Stripe deposits & payment requests -------------------------------
+// Every payment request — whether settled by Stripe or by bank transfer —
+// is one row in `payment_requests` (see useCreatePaymentRequest's `method`
+// param below, and payment_ribs above for the encrypted RIB the admin picks
+// from when method is "rib").
+
+export type PaymentRequest = Database["public"]["Tables"]["payment_requests"]["Row"];
+
+export function paymentRequestsKey(invoiceId: string) {
+  return ["admin", "payment-requests", invoiceId] as const;
+}
+
+/** Full payment history for one invoice — never a single overwritten total. */
+export function usePaymentRequests(invoiceId: string) {
+  return useQuery({
+    queryKey: paymentRequestsKey(invoiceId),
+    queryFn: async (): Promise<PaymentRequest[]> => {
+      const { data, error } = await supabase
+        .from("payment_requests")
+        .select("*")
+        .eq("invoice_id", invoiceId)
+        .order("created_at", { ascending: false });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+}
+
+/** Superadmin-only: fix or change the deposit (percentage or fixed amount) required on an invoice. */
+export function useSetInvoiceDeposit(projectId: string) {
+  const invalidate = useInvalidateAdmin(projectId);
+  return useMutation({
+    mutationFn: async (input: {
+      invoiceId: string;
+      depositType: "percentage" | "fixed";
+      depositValue: number;
+    }) => setInvoiceDepositFn({ data: input }),
+    onSuccess: invalidate,
+  });
+}
+
+export const billingSettingsKey = ["admin", "billing-settings"] as const;
+
+/** Superadmin-only global default deposit percentage. */
+export function useBillingSettings() {
+  return useQuery({
+    queryKey: billingSettingsKey,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("billing_settings")
+        .select("*")
+        .eq("id", 1)
+        .maybeSingle();
+      if (error) throw error;
+      return data;
+    },
+    staleTime: 60_000,
+  });
+}
+
+export function useSetDefaultDepositPercentage() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (percentage: number) =>
+      setDefaultDepositPercentageFn({ data: { percentage } }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: billingSettingsKey }),
+  });
+}
+
+/**
+ * Admin action: send a payment request (deposit / extra call / final
+ * balance) for a chosen amount. The server recomputes the real remaining
+ * balance and rejects anything above it — this hook's `amount` is only a
+ * proposal, never authoritative.
+ */
+export function useCreatePaymentRequest(projectId: string, invoiceId: string) {
+  const invalidate = useInvalidateAdmin(projectId);
+  const queryClient = useQueryClient();
+  return useMutation({
+    // `idempotencyKey` must be generated once by the caller (e.g. on compose
+    // form mount) and reused across retries/double-clicks of the *same*
+    // logical send — generating it here per mutate() call would defeat the
+    // DB-level ON CONFLICT dedupe, since every double-click would mint a
+    // fresh key. The UI additionally disables the button while pending.
+    mutationFn: async (input: {
+      amount: number;
+      type: "deposit" | "partial" | "balance";
+      idempotencyKey: string;
+      method?: "stripe" | "rib";
+      ribId?: string;
+    }) =>
+      createPaymentRequestFn({
+        data: {
+          invoiceId,
+          amount: input.amount,
+          type: input.type,
+          idempotencyKey: input.idempotencyKey,
+          method: input.method ?? "stripe",
+          ...(input.ribId ? { ribId: input.ribId } : {}),
+        },
+      }),
+    onSuccess: () => {
+      invalidate();
+      queryClient.invalidateQueries({ queryKey: paymentRequestsKey(invoiceId) });
+    },
+  });
+}
+
+export function useCancelPaymentRequest(projectId: string, invoiceId: string) {
+  const invalidate = useInvalidateAdmin(projectId);
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (paymentRequestId: string) =>
+      cancelPaymentRequestFn({ data: { paymentRequestId } }),
+    onSuccess: () => {
+      invalidate();
+      queryClient.invalidateQueries({ queryKey: paymentRequestsKey(invoiceId) });
+    },
   });
 }

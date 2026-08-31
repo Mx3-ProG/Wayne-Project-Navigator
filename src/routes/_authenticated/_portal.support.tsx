@@ -45,10 +45,10 @@ function SupportPage() {
           <GlassCard className="h-full p-5">
             <Mail className="size-5 text-primary" />
             <p className="mt-3 font-medium">{t("support.email.title")}</p>
-            <p className="mt-1 text-sm text-muted-foreground">hello@wayne-web.com</p>
+            <p className="mt-1 text-sm text-muted-foreground">contact@flux-wayne.com</p>
           </GlassCard>
         </a>
-        <a href="https://wa.me/33600000000" target="_blank" rel="noreferrer">
+        <a href="https://chat.whatsapp.com/JLEebCQ8qXV5eKx6uWh4z9?mode=gi_t" target="_blank" rel="noreferrer">
           <GlassCard className="h-full p-5">
             <MessageCircle className="size-5 text-primary" />
             <p className="mt-3 font-medium">{t("support.message.title")}</p>

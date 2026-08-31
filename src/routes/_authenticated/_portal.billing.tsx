@@ -97,6 +97,27 @@ function BillingPage() {
         <Progress value={pct} className="mt-5 h-2" />
       </GlassCard>
 
+      {data.paymentRequests
+        .filter((request) => request.status === "pending")
+        .map((request) => (
+          <GlassCard key={request.id} variant="strong" interactive={false} className="p-5 sm:p-6">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary">
+              {t("payments.client.newRequest")}
+            </p>
+            <div className="mt-2 flex flex-wrap items-center justify-between gap-3">
+              <p className="font-display text-2xl font-semibold">
+                {formatMoney(request.amount, locale)}
+              </p>
+              <Button asChild size="lg">
+                <Link to="/pay/$paymentRequestId" params={{ paymentRequestId: request.id }}>
+                  <CreditCard className="mr-2 size-4" />
+                  {t("payments.client.pay", { amount: formatMoney(request.amount, locale) })}
+                </Link>
+              </Button>
+            </div>
+          </GlassCard>
+        ))}
+
       <div className="space-y-3">
         {data.invoices.map((invoice) => {
           const isPaid = invoice.status === "paid";
@@ -131,6 +152,18 @@ function BillingPage() {
                           ? t("billing.dueOn", { date: formatDate(invoice.due_date, locale) })
                           : t("billing.invoice.awaitingOffer")}
                     </p>
+                    {invoice.deposit_amount ? (
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        {t("payments.client.summary", {
+                          deposit: formatMoney(invoice.deposit_amount, locale),
+                          paid: formatMoney(invoice.paid_total, locale),
+                          remaining: formatMoney(
+                            Math.max(0, Number(invoice.amount) - Number(invoice.paid_total)),
+                            locale,
+                          ),
+                        })}
+                      </p>
+                    ) : null}
                   </div>
                 </div>
                 <div className="flex flex-wrap items-center gap-3">

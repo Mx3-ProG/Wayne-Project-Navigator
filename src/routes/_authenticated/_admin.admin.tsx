@@ -2,8 +2,12 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { AlertCircle, ArrowUpRight, FileCheck2, Send, UserCircle2 } from "lucide-react";
 import { useMemo, useState } from "react";
 
+import { toast } from "sonner";
+
 import { GlassCard } from "@/components/glass/GlassCard";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -12,7 +16,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useAdminProjects, type AdminProjectRow } from "@/hooks/useAdmin";
+import {
+  useAdminProjects,
+  useBillingSettings,
+  useIsSuperadmin,
+  useSetDefaultDepositPercentage,
+  type AdminProjectRow,
+} from "@/hooks/useAdmin";
 import { isProjectType } from "@/lib/brief-flow";
 import { parseBusinessProfile, requiredProgress } from "@/lib/business-profile";
 import { useI18n } from "@/lib/i18n";
@@ -108,6 +118,8 @@ function AdminOverview() {
         <p className="mt-2 text-muted-foreground">{t("admin.list.subtitle")}</p>
       </header>
 
+      <BillingSettingsCard />
+
       <div className="flex flex-wrap items-center gap-2">
         {filters.map((item) => (
           <button
@@ -160,6 +172,53 @@ function AdminOverview() {
         </div>
       )}
     </div>
+  );
+}
+
+/** Superadmin-only: the default deposit % applied when configuring new invoices. */
+function BillingSettingsCard() {
+  const { t } = useI18n();
+  const { data: isSuperadmin } = useIsSuperadmin();
+  const { data: settings } = useBillingSettings();
+  const setDefault = useSetDefaultDepositPercentage();
+  const [value, setValue] = useState("");
+
+  if (!isSuperadmin) return null;
+
+  const current = value || String(settings?.default_deposit_percentage ?? 30);
+
+  async function save() {
+    try {
+      await setDefault.mutateAsync(Number(current) || 0);
+      toast.success(t("payments.settings.saved"));
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : t("payments.settings.error"));
+    }
+  }
+
+  return (
+    <GlassCard interactive={false} className="p-5">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary">
+        {t("payments.settings.title")}
+      </p>
+      <div className="mt-3 flex flex-wrap items-end gap-3">
+        <div className="space-y-1.5">
+          <Label htmlFor="default-deposit">{t("payments.settings.defaultDeposit")}</Label>
+          <Input
+            id="default-deposit"
+            type="number"
+            min={1}
+            max={100}
+            className="w-28"
+            value={current}
+            onChange={(event) => setValue(event.target.value)}
+          />
+        </div>
+        <Button size="sm" disabled={setDefault.isPending} onClick={save}>
+          {t("payments.settings.save")}
+        </Button>
+      </div>
+    </GlassCard>
   );
 }
 
