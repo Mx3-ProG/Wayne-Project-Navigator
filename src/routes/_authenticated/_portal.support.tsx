@@ -55,7 +55,7 @@ function SupportPage() {
             <p className="mt-1 text-sm text-muted-foreground">{t("support.message.subtitle")}</p>
           </GlassCard>
         </a>
-        <a href="https://cal.com" target="_blank" rel="noreferrer">
+        <a href="https://cal.comhttps://www.cadencemada.com/book/mes-rendez-vous" target="_blank" rel="noreferrer">
           <GlassCard className="h-full p-5">
             <Calendar className="size-5 text-primary" />
             <p className="mt-3 font-medium">{t("support.call.title")}</p>
